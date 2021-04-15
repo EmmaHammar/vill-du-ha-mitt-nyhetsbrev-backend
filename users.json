@@ -9,7 +9,7 @@
     "id": "22222",
     "userName": "kajsa",
     "password": "kavat",
-    "subscription": true
+    "subscription": false
   },
   {
     "userName": "kalleaaa",
@@ -22,5 +22,11 @@
     "password": "pigg",
     "subscription": false,
     "id": "51821"
+  },
+  {
+    "userName": "olle",
+    "password": "hammar",
+    "subscription": true,
+    "id": "73091"
   }
 ]

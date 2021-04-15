@@ -2,16 +2,25 @@
   {
     "id": "11111",
     "userName": "emma",
-    "password": "hammar"
+    "password": "hammar",
+    "subscription": false
   },
   {
     "id": "22222",
     "userName": "kajsa",
-    "password": "kavat"
+    "password": "kavat",
+    "subscription": true
   },
   {
-    "userName": "elin",
-    "password": "pelin",
-    "id": "08754"
+    "userName": "kalleaaa",
+    "password": "adf",
+    "subscription": false,
+    "id": "54210"
+  },
+  {
+    "userName": "mimmi",
+    "password": "pigg",
+    "subscription": false,
+    "id": "51821"
   }
 ]

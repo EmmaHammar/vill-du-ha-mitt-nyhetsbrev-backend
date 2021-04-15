@@ -109,7 +109,7 @@ router.post('/login', function(req, res) {
 
       //kolla om password och användarnamn stämmer
       if (result.password === req.body.password) {
-      answerLogin = {"id": result.id};
+      answerLogin = {"subscription": result.subscription, "id": result.id};
 
       }
       else {

@@ -126,4 +126,50 @@ router.post('/login', function(req, res) {
   });
 });
 
+router.get('/subscribe/:id', function(req, res, next) {
+
+  let showUserId = req.params.id;
+  // console.log(showUserId);
+
+  fs.readFile("users.json", function(err, data) {
+    if (err) {
+      console.log(err);
+    }
+
+    //hämta alla users i users.json
+    const users = JSON.parse(data);
+
+    let showUser = users.find( ({id}) => id === showUserId);
+    // console.log(showUser);
+
+    switch (showUser.subscription) {
+      case true: 
+        console.log("ändra till false");
+        showUser.subscription = false;
+        break;
+      case false: 
+        console.log("ändra till true");
+        showUser.subscription = true;
+        break;
+    };
+    
+    // users.push(showUser);
+    // Object.assign(users, showUser);
+    console.log(users);
+
+    fs.writeFile("users.json", JSON.stringify(users, null, 2), function(err) {
+          
+      if (err) {
+        console.log(err);
+      };
+
+    });
+    
+    res.json(showUser.subscription);
+  });
+
+
+});
+
+
 module.exports = router;

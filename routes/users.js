@@ -3,7 +3,7 @@ var router = express.Router();
 const cors = require("cors");
 const fs = require("fs");
 const rand = require("random-key");
-
+const CryptoJS = require("crypto-js");
 
 router.use(cors());
 
@@ -56,6 +56,24 @@ router.post('/register', function(req, res) {
       // console.log(newUser);
       // console.log(users);
 
+      //real password:
+      console.log(newUser.password);
+      //kryptera userPass och det är detta som ska sparas till backend
+      let cryptoPass = CryptoJS.AES.encrypt(newUser.password, "Salt Nyckel").toString();
+      // console.log(cryptoPass);
+      newUser.password = cryptoPass;
+
+      //FRÅGA: varför går ej detta? Då blir lösen inte krypterat, varför? 
+      // let realPass = newUser.password;
+      // console.log(realPass);
+      // //kryptera userPass och det är detta som ska sparas till backend
+      // let cryptoPass = CryptoJS.AES.encrypt(realPass, "Salt Nyckel").toString();
+      // console.log(cryptoPass);
+      // realPass = cryptoPass;
+      // console.log(newUser);
+
+      console.log(newUser);
+
       //lägg till newUser till users
       users.push(newUser);
       // console.log(users);
@@ -85,7 +103,7 @@ router.post('/login', function(req, res) {
 
   // console.log(req.body);
   let user = req.body;
-  console.log(user);
+  // console.log(user);
 
   fs.readFile("users.json", function(err, data) {
     if (err) {
@@ -98,17 +116,28 @@ router.post('/login', function(req, res) {
 
     //söka efter userName från webbläsaren i users
     const result = users.find( ({ userName }) => userName === user.userName);
-    console.log(result);
-    console.log(user);
+    // console.log(result);
+    // console.log(user);
     // console.log(userName); //FRÅGA VARFÖR FÅR JAG ERROR OM JAG KONSOLLLOGGAR DETTA? ÄR INTE USERNAME REFERERENS TILL USERNAME I JSONFILEN? ELLER VAD ÄR USERNAME?
-
 
     //om user finns i users
     if (result !== undefined) {
       answerLogin = {"result": "user finns"};
 
+      //krypterat pass från users.json:
+      // console.log(result.password);
+
+      //pass from json
+      console.log(result.password); 
+
+      let originalPass = CryptoJS.AES.decrypt(result.password, "Salt Nyckel").toString(CryptoJS.enc.Utf8);
+      console.log(originalPass);
+
+      //pass from webbläsaren
+      console.log(req.body.password);
+
       //kolla om password och användarnamn stämmer
-      if (result.password === req.body.password) {
+      if (originalPass === req.body.password) {
       // answerLogin = {"subscription": result.subscription, "id": result.id};
       answerLogin = {"id": result.id};
 
@@ -142,37 +171,11 @@ router.get('/userpage/:id', function(req, res, next) {
 
     let showUser = users.find( ({id}) => id === showUserId);
     // console.log(showUser);
-
-    // switch (showUser.subscription) {
-    //   case true: 
-    //     console.log("ändra till false");
-    //     showUser.subscription = false;
-    //     break;
-    //   case false: 
-    //     console.log("ändra till true");
-    //     showUser.subscription = true;
-    //     break;
-    // };
-    
-    // // users.push(showUser);
-    // Object.assign(users, showUser);
-    // console.log(users);
-
-    // fs.writeFile("users.json", JSON.stringify(users, null, 2), function(err) {
-          
-    //   if (err) {
-    //     console.log(err);
-    //   };
-
-    // });
     
     res.json(showUser.subscription);
   });
 
-
 });
-
-
 
 router.get('/subscribe/:id', function(req, res, next) {
 
@@ -215,7 +218,6 @@ router.get('/subscribe/:id', function(req, res, next) {
     
     res.json(showUser.subscription);
   });
-
 
 });
 

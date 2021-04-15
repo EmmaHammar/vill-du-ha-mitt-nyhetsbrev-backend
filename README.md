@@ -8,6 +8,7 @@
 (Behövs väl ej ha med för konmmer med iom npm install o att jag importerat dem i filen genom require?)
 npm install cors
 npm i random-key
+npm install crypto-js
 
 
 # Inlämningsuppgift: Vill du ha mitt nyhetsbrev?
@@ -35,12 +36,12 @@ G Krav
 2. Administrationsgränssnittet skall vara uppsatt enligt monolit principer.
 3. Nya användare som sparas i frontend gränssittet skall sparas i en MongoDB databas.
 DONE 4. En registrerad användare skall kunna logga in på frontend applikationen 
-5. och där kunna ändra sin  prenumerationsstatus.
+DONE 5. och där kunna ändra sin  prenumerationsstatus.
 DONE - 6. Nya användare får randomiserade nycklar som identifierar dem.
 7. En administratör skall kunna logga in på express servern och där kunna se alla registrerade användare samt kunna se en lista på alla de mailadresser som prenumererar på ett nyhetsbrev.
 
 VG krav
-Lösenorden som sparas skall vara krypterade.
+DONE Lösenorden som sparas skall vara krypterade.
 Frontend applikationen är deployad på Github pages
 Backend servern är deployad på Heroku
 Databasen är lagrad på MongoDB Atlas

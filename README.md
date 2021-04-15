@@ -1,6 +1,11 @@
 # Start project
 npx express-generator --no-view
+
 npm install
+
+(Behövs väl ej ha med för konmmer med iom npm install o att jag importerat dem i filen genom require?)
+npm install cors
+npm i random-key
 
 
 # Inlämningsuppgift: Vill du ha mitt nyhetsbrev?
@@ -24,12 +29,13 @@ Siktar du på VG så lämna även in en länk till applikationen i produktion (d
 Kravlista:
 
 G Krav
-Frontend applikationen (för besökare/användare) är uppsatt enligt headless principer.
-Administrationsgränssnittet skall vara uppsatt enligt monolit principer.
-Nya användare som sparas i frontend gränssittet skall sparas i en MongoDB databas.
-En registrerad användare skall kunna logga in på frontend applikationen och där kunna ändra sin prenumerationsstatus.
-Nya användare får randomiserade nycklar som indentifierar dem.
-En administratör skall kunna logga in på express servern och där kunna se alla registrerade användare samt kunna se en lista på alla de mailadresser som prenumererar på ett nyhetsbrev.
+1. Frontend applikationen (för besökare/användare) är uppsatt enligt headless principer.
+2. Administrationsgränssnittet skall vara uppsatt enligt monolit principer.
+3. Nya användare som sparas i frontend gränssittet skall sparas i en MongoDB databas.
+4. En registrerad användare skall kunna logga in på frontend applikationen 
+5. och där kunna ändra sin  prenumerationsstatus.
+DONE - 6. Nya användare får randomiserade nycklar som identifierar dem.
+7. En administratör skall kunna logga in på express servern och där kunna se alla registrerade användare samt kunna se en lista på alla de mailadresser som prenumererar på ett nyhetsbrev.
 
 VG krav
 Lösenorden som sparas skall vara krypterade.

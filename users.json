@@ -2,31 +2,16 @@
   {
     "id": "11111",
     "userName": "emma",
-    "passWord": "hammar"
+    "password": "hammar"
   },
   {
     "id": "22222",
     "userName": "kajsa",
-    "passWord": "kavat"
+    "password": "kavat"
   },
   {
     "userName": "elin",
     "password": "pelin",
     "id": "08754"
-  },
-  {
-    "userName": "nils",
-    "password": "pyssling",
-    "id": "46301"
-  },
-  {
-    "userName": "eva",
-    "password": "adam",
-    "id": "57904"
-  },
-  {
-    "userName": "kalles",
-    "password": "kaviar",
-    "id": "58586"
   }
 ]

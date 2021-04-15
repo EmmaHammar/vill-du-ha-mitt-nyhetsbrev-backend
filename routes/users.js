@@ -13,12 +13,12 @@ router.get('/', function(req, res, next) {
 });
 
 //varför behövs denna get? Här post ska skrivas ut?
-router.get('/login', function(req, res, next) {
-  res.send("hej från get login-routern");
+router.get('/register', function(req, res, next) {
+  res.send("hej från get register-routern");
 });
 
 //skicka ny användare till servern. Spara i users.json
-router.post('/login', function(req, res) {
+router.post('/register', function(req, res) {
 
   // console.log(req.body);
   let newUser = req.body;
@@ -41,7 +41,7 @@ router.post('/login', function(req, res) {
 
     if (result !== undefined) {
       console.log("no registration, userName already exists");
-      res.json("error")
+      res.json("userName already exists")
     } else {
       console.log("ok to register");
 
@@ -75,6 +75,55 @@ router.post('/login', function(req, res) {
   
   });
 
+});
+
+router.get('/login', function(req, res, next) {
+  res.send("hej från get login-routern");
+});
+
+router.post('/login', function(req, res) {
+
+  // console.log(req.body);
+  let user = req.body;
+  console.log(user);
+
+  fs.readFile("users.json", function(err, data) {
+    if (err) {
+      console.log(err);
+    }
+
+    //hämta users
+    const users = JSON.parse(data);
+    // console.log(users);
+
+    //söka efter userName från webbläsaren i users
+    const result = users.find( ({ userName }) => userName === user.userName);
+    console.log(result);
+    console.log(user);
+    // console.log(userName); //FRÅGA VARFÖR FÅR JAG ERROR OM JAG KONSOLLLOGGAR DETTA? ÄR INTE USERNAME REFERERENS TILL USERNAME I JSONFILEN? ELLER VAD ÄR USERNAME?
+
+
+    //om user finns i users
+    if (result !== undefined) {
+      answerLogin = {"result": "user finns"};
+
+      //kolla om password och användarnamn stämmer
+      if (result.password === req.body.password) {
+      answerLogin = {"id": result.id};
+
+      }
+      else {
+        answerLogin = {"result": "error fel lösenord"}
+      }
+
+    } else { //om user ej finns
+      answerLogin = {"result": "error user finns ej"};
+    };
+
+    //skickar tillbaka resultatet till webbläsaren: 
+    res.json(answerLogin);
+
+  });
 });
 
 module.exports = router;

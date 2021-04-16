@@ -2,18 +2,25 @@ var express = require('express');
 var router = express.Router();
 const fs = require("fs");
 
+let htmlHead = 
+    `<link href="/stylesheets/style.css" rel="stylesheet" type="text/css"> 
+    <link rel="preconnect" href="https://fonts.gstatic.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com">
+    <link href="https://fonts.googleapis.com/css2?family=Titillium+Web:wght@300;400;700&display=swap" rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.gstatic.com">
+    <link href="https://fonts.googleapis.com/css2?family=Monoton&display=swap" rel="stylesheet">`;
 
 /* GET users listing. */
 router.get('/', function(req, res, next) {
 
-let printAdminLoginTemplate = 
-    `<title>Adminsida för Kundklubben</title> <h1>Adminsida för Kundklubben</h1>
+let printAdminLoginTemplate = htmlHead +
+    `<title>Adminsida för Kundklubben</title> <h1>Adminsida för <span class="font-family-logo">Kundklubben</span></h1>
     <div>
         <h2>Adminlogin</h2>
         <form action="/admin" method="post">
-            <div><input typ="text" id="adminUserName" name="adminUserName">Admin-användarnamn</div> 
-            <div><input typ="text" id="adminPassword" name="adminPassword">Admin-lösenord</div>
-            <div id="adminBtn"><button>Admin-login</button></div> 
+            <div><input typ="text" id="adminUserName" name="adminUserName" placeholder="Skriv ditt användarnamn"></div> 
+            <div><input typ="text" id="adminPassword" name="adminPassword" placeholder="Skriv ditt lösenord"></div>
+            <div id="adminBtn"><button>Logga in</button></div> 
         </form>
     </div>`;
   res.send(printAdminLoginTemplate);
@@ -67,7 +74,7 @@ router.post('/', function(req, res) {
 
 router.get('/loggedin', function(req, res) {
 
-    let printUsers = `<h3>Registrerade användare</h3>`;
+    let printUsers = htmlHead + `<h3>Registrerade användare</h3>`;
 
     fs.readFile('users.json', function(err, data) {
         if (err) {
@@ -91,10 +98,9 @@ router.get('/loggedin', function(req, res) {
             printUsers += userTemplate;
         };
 
-        printUsers += `
-            <a href="/admin/loggedin/subscribe">Se prenumerant-lista</a><br>
-            <a href="/admin">Admin-logout</a>
-        `;
+        printUsers += 
+            `<a href="/admin/loggedin/subscribe" class="btn-fill">Se prenumerant-lista</a>
+            <a href="/admin">Logga ut</a>`;
         res.send(printUsers);
     });
     
@@ -102,7 +108,7 @@ router.get('/loggedin', function(req, res) {
 
 router.get('/loggedin/subscribe', function(req, res) {
 
-    let printSubscription = `<h4>Prenumeranter</h4>`;
+    let printSubscription = htmlHead + `<h4>Prenumeranter</h4>`;
 
     fs.readFile('users.json', function(err, data) {
         if (err) {

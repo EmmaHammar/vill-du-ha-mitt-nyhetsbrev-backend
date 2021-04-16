@@ -1,8 +1,33 @@
 body {
   padding: 50px;
-  font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
+  font-family: 'Titillium Web', sans-serif;
+  background-color: darkorchid;
+}
+
+.font-family-logo {
+  font-family: 'Monoton', cursive;
+  color: darkorange;
 }
 
 a {
-  color: #00B7FF;
+  text-decoration: none;
+  padding: 0.2rem;
+  padding-left: 0.4rem;
+  padding-right: 0.4rem;
+  margin-bottom: 10rem;
+}
+
+button, a {
+  font-size: 0.9rem;
+  border-radius: 1rem;
+  border: 2px solid linen;
+  background: none;
+  color: linen;
+  margin-top: 1rem;
+}
+
+.btn-fill {
+  border: 2px solid linen;
+  background: linen;
+  color: darkorchid;
 }

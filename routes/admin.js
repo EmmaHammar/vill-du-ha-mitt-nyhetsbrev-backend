@@ -98,11 +98,53 @@ router.get('/loggedin', function(req, res) {
             printUsers += userTemplate;
         };
 
-        printUsers += `<a href="/admin">Admin-logout</a>`;
+        printUsers += `
+            <a href="/admin/loggedin/subscribe">Se prenumerant-lista</a><br>
+            <a href="/admin">Admin-logout</a>
+        `;
         res.send(printUsers);
     });
     
-    
 }); 
+
+router.get('/loggedin/subscribe', function(req, res) {
+
+    let printSubscription = `<h4>Prenumeranter</h4>`;
+
+    fs.readFile('users.json', function(err, data) {
+        if (err) {
+            console.log(err);
+        }
+
+        let users = JSON.parse(data);
+        // console.log(users);
+
+        for (user in users) {
+            console.log(users[user].subscription);
+
+            if (users[user].subscription === true) {
+                let subscriptionTemplate = `
+                    <article>
+                        <ul>
+                            <li>
+                                <p>${users[user].userName}<p>
+                            </li>
+                        </ul>
+                    </article>
+                `;
+                printSubscription += subscriptionTemplate;
+            }
+
+        
+        };
+
+        printSubscription += `
+            <a href="/admin/loggedin/">Tillbaka</a><br>
+        `;
+        res.send(printSubscription);
+    });
+
+    // res.send("visa prenumeranter")
+});
 
 module.exports = router;

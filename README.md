@@ -18,7 +18,6 @@ Admin-användarnamn: olle
 Admin-lösenord: test2
 
 # Inlämningsuppgift: Vill du ha mitt nyhetsbrev?
-
 Uppgiften går ut på att utveckla ett användargränssnitt där besökare på din webbsida kan regsitrera ett nytt konto och då välja att prenumenera eller inte på ett nyhetsbrev. 
 Sedan skall användaren kunna logga in på sitt skapade konto och ändra sin prenumerationsstatus.
 
@@ -49,6 +48,6 @@ DONE - 6. Nya användare får randomiserade nycklar som identifierar dem.
 VG krav
 DONE Lösenorden som sparas skall vara krypterade.
 Frontend applikationen är deployad på Github pages
-Backend servern är deployad på Heroku
+DONE Backend servern är deployad på Heroku
 Databasen är lagrad på MongoDB Atlas
 För att få VG på uppgiften så skall även en skriven reflektion som når upp till kravet av nivå 2 (reflekterande text) lämnas in tillsammans med länkar till repos och projektet/sidan i produktion (live länk).

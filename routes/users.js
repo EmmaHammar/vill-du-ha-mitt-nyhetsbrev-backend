@@ -9,12 +9,16 @@ router.use(cors());
 
 /* GET users listing. */
 router.get('/', function(req, res, next) {
+
   res.send('users root');
+
 });
 
 //varför behövs denna get? Här post ska skrivas ut?
 router.get('/register', function(req, res, next) {
+
   res.send("hej från get register-routern");
+
 });
 
 //skicka ny användare till servern. Spara i users.json
@@ -36,8 +40,6 @@ router.post('/register', function(req, res) {
     //kolla om användarnamnet redan finns bland users
     const result = users.find( ({ userName }) => userName === newUser.userName);
     // console.log(result);
-
-    //FRÅGA: kolla så lösen inte är tomt - kollla i frontend för ska inte gå att skicka
 
     if (result !== undefined) {
       console.log("no registration, userName already exists");
@@ -80,23 +82,20 @@ router.post('/register', function(req, res) {
 
       //spara users till users.json
       fs.writeFile("users.json", JSON.stringify(users, null, 2), function(err) {
-          
         if (err) {
           console.log(err);
         };
-
       });
-
       res.json("newUser saved");
-
     };
-  
   });
 
 });
 
 router.get('/login', function(req, res, next) {
+
   res.send("hej från get login-routern");
+
 });
 
 router.post('/login', function(req, res) {
@@ -124,50 +123,43 @@ router.post('/login', function(req, res) {
     if (result !== undefined) {
       answerLogin = {"result": "user finns"};
 
-      //krypterat pass från users.json:
-      // console.log(result.password);
-
       //pass from json
-      console.log(result.password); 
+      // console.log(result.password); 
 
       let originalPass = CryptoJS.AES.decrypt(result.password, "Salt Nyckel").toString(CryptoJS.enc.Utf8);
-      console.log(originalPass);
+      // console.log(originalPass);
 
       //pass from webbläsaren
-      console.log(req.body.password);
+      // console.log(req.body.password);
 
       //kolla om password och användarnamn stämmer
       if (originalPass === req.body.password) {
       // answerLogin = {"subscription": result.subscription, "id": result.id};
       answerLogin = {"id": result.id};
-
-      }
-      else {
+      } else {
         answerLogin = {"result": "error fel lösenord"}
       }
 
     } else { //om user ej finns
       answerLogin = {"result": "error user finns ej"};
     };
-
     //skickar tillbaka resultatet till webbläsaren: 
     res.json(answerLogin);
-
   });
+
 });
 
 router.get('/userpage/:id', function(req, res, next) {
 
   let showUserId = req.params.id;
   // console.log(showUserId);
-
-  fs.readFile("users.json", function(err, data) {
+  fs.readFile('users.json', function(err, data) {
     if (err) {
       console.log(err);
     }
-
     //hämta alla users i users.json
     const users = JSON.parse(data);
+    console.log(users);
 
     let showUser = users.find( ({id}) => id === showUserId);
     // console.log(showUser);
@@ -206,20 +198,17 @@ router.get('/subscribe/:id', function(req, res, next) {
     
     // users.push(showUser);
     Object.assign(users, showUser);
-    console.log(users);
+    // console.log(users);
 
     fs.writeFile("users.json", JSON.stringify(users, null, 2), function(err) {
-          
       if (err) {
         console.log(err);
       };
-
     });
     
     res.json(showUser.subscription);
   });
 
 });
-
 
 module.exports = router;

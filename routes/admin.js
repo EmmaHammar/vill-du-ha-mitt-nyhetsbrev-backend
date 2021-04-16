@@ -6,8 +6,8 @@ const fs = require("fs");
 /* GET users listing. */
 router.get('/', function(req, res, next) {
 
-let printAdminLoginTemplate = `
-    <title>Adminsida för Kundklubben</title> <h1>Adminsida för Kundklubben</h1>
+let printAdminLoginTemplate = 
+    `<title>Adminsida för Kundklubben</title> <h1>Adminsida för Kundklubben</h1>
     <div>
         <h2>Adminlogin</h2>
         <form action="/admin" method="post">
@@ -15,9 +15,7 @@ let printAdminLoginTemplate = `
             <div><input typ="text" id="adminPassword" name="adminPassword">Admin-lösenord</div>
             <div id="adminBtn"><button>Admin-login</button></div> 
         </form>
-    </div>
-`;
-
+    </div>`;
   res.send(printAdminLoginTemplate);
 
 });
@@ -31,7 +29,6 @@ router.post('/', function(req, res) {
     let adminUser = req.body;
     let adminLoginMsg; 
     console.log(adminUser);
-
 
     fs.readFile("admins.json", function(err, data) {
         if(err) {
@@ -50,9 +47,6 @@ router.post('/', function(req, res) {
         if (result !== undefined) {
             console.log("admin exists");
             adminLoginMsg = "admin exists";
-            
-            
-
             if (adminUser.adminPassword === result.adminPassword) {
                 console.log("login success");
                 res.redirect('/admin/loggedin')
@@ -62,11 +56,11 @@ router.post('/', function(req, res) {
                 adminLoginMsg = "error, wrong password";
                 res.json(adminLoginMsg);
             }
+
         } else {
             adminLoginMsg = "error, users doesn't exist";
             res.json(adminLoginMsg);
         }
-
     });
 
 });
@@ -84,17 +78,16 @@ router.get('/loggedin', function(req, res) {
         // console.log(users);
 
         for (user in users) {
-            console.log(users[user].userName);
+            // console.log(users[user].userName);
         
-            let userTemplate = `
-                <article>
+            let userTemplate = 
+                `<article>
                     <ul>
                         <li>
                             <p>${users[user].userName}<p>
                         </li>
                     </ul>
-                </article>
-            `;
+                </article>`;
             printUsers += userTemplate;
         };
 
@@ -123,28 +116,22 @@ router.get('/loggedin/subscribe', function(req, res) {
             console.log(users[user].subscription);
 
             if (users[user].subscription === true) {
-                let subscriptionTemplate = `
-                    <article>
+                let subscriptionTemplate = 
+                    `<article>
                         <ul>
                             <li>
                                 <p>${users[user].userName}<p>
                             </li>
                         </ul>
-                    </article>
-                `;
+                    </article>`;
                 printSubscription += subscriptionTemplate;
             }
-
-        
         };
 
-        printSubscription += `
-            <a href="/admin/loggedin/">Tillbaka</a><br>
-        `;
+        printSubscription += `<a href="/admin/loggedin/">Tillbaka</a><br>`;
         res.send(printSubscription);
     });
 
-    // res.send("visa prenumeranter")
 });
 
 module.exports = router;

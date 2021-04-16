@@ -72,16 +72,37 @@ router.post('/', function(req, res) {
 });
 
 router.get('/loggedin', function(req, res) {
+
+    let printUsers = `<h3>Registrerade användare</h3>`;
+
     fs.readFile('users.json', function(err, data) {
         if (err) {
             console.log(err);
         }
 
         let users = JSON.parse(data);
-        console.log(users);
-    })
+        // console.log(users);
+
+        for (user in users) {
+            console.log(users[user].userName);
+        
+            let userTemplate = `
+                <article>
+                    <ul>
+                        <li>
+                            <p>${users[user].userName}<p>
+                        </li>
+                    </ul>
+                </article>
+            `;
+            printUsers += userTemplate;
+        };
+
+        res.send(printUsers);
+
+    });
     
-    res.send("hej från inlogged router")
+    
 }); 
 
 module.exports = router;

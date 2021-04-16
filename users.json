@@ -2,7 +2,7 @@
   {
     "userName": "pippi",
     "password": "U2FsdGVkX196GAVmDAodGHEuSX4Bq+Nzt6dbFNXKcOs=",
-    "subscription": false,
+    "subscription": true,
     "id": "71800"
   },
   {
@@ -16,5 +16,23 @@
     "password": "U2FsdGVkX19INYgJa5HXCS3/D8Fcz9m18OW0OgTFsko=",
     "subscription": false,
     "id": "11317"
+  },
+  {
+    "userName": "nils",
+    "password": "U2FsdGVkX1/sel1ELR9/6WvzZUHsk7dK7nqAhcPhr2w=",
+    "subscription": true,
+    "id": "86122"
+  },
+  {
+    "userName": "nils1",
+    "password": "U2FsdGVkX1+svOllxwL1G0Fz+B/CSNVr8zwOSQmzf54=",
+    "subscription": false,
+    "id": "15860"
+  },
+  {
+    "userName": "emma",
+    "password": "U2FsdGVkX198t3dJXVY+rKGLeynl/PDDvlgF8QtDT8I=",
+    "subscription": false,
+    "id": "84661"
   }
 ]

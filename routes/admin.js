@@ -98,8 +98,8 @@ router.get('/loggedin', function(req, res) {
             printUsers += userTemplate;
         };
 
+        printUsers += `<a href="/admin">Admin-logout</a>`;
         res.send(printUsers);
-
     });
     
     

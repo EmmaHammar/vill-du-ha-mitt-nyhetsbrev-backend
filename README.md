@@ -10,6 +10,12 @@ npm install cors
 npm i random-key
 npm install crypto-js
 
+# Admin-login
+Admin-användarnamn: emma
+Admin-lösenord: test1
+
+Admin-användarnamn: olle
+Admin-lösenord: test2
 
 # Inlämningsuppgift: Vill du ha mitt nyhetsbrev?
 

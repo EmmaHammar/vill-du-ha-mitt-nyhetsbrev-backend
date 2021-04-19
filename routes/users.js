@@ -17,13 +17,10 @@ router.get('/', function(req, res, next) {
 //varför behövs denna get? Här post ska skrivas ut?
 router.get('/register', function(req, res, next) {
 
-
   let newUser = req.body;
 
-  //Vad är collection users? Hur få in jsonfilen eller ska den inte finnas?
-  // req.app.locals.db.collection("users").find("userName": newUser).toArray() FRÅGA: VARFÖR FUNKAR DET INTE ATT HA MED "USERNAME"?
-  req.app.locals.db.collection("users").find(newUser).toArray()
-
+  req.app.locals.db.collection("users").find( {"userName": newUser} ).toArray()
+  // req.app.locals.db.collection("users").find().toArray()
   .then(results => {
     console.log(results);
 
@@ -39,21 +36,7 @@ router.get('/register', function(req, res, next) {
   
 });
 
-router.get('/add', function(req, res, next) {
 
-  res.send("hej");
-}); 
-router.post("/add", function(req, res) {
-
-  //kan skapa ett nytt objekt som vi fångat i ex ett formulär o lägga in inuti insertOne istället för req.body 
-  req.app.locals.db.collection("users").insertOne(req.body)
-  .then(result => {
-    console.log(result);
-    // res.redirect("/show");
-    res.send(result);
-  })
-
-});
 
 //skicka ny användare till servern. Spara i users.json
 router.post('/register', function(req, res) {
@@ -62,67 +45,74 @@ router.post('/register', function(req, res) {
   let newUser = req.body;
   // console.log(newUser);
 
-  fs.readFile("users.json", function(err, data) {
-    if (err) {
-      console.log(err);
-    }
+  //kan skapa ett nytt objekt som vi fångat i ex ett formulär o lägga in inuti insertOne istället för req.body 
+  req.app.locals.db.collection("users").insertOne(req.body)
+  .then(result => {
+    console.log(result);
+    // res.redirect("/show");
+    res.send(result);
+  })
+  
 
-    //hämta alla users
-    const users = JSON.parse(data);
-    // console.log(users);
+  // fs.readFile("users.json", function(err, data) {
+  //   if (err) {
+  //     console.log(err);
+  //   }
 
-    //kolla om användarnamnet redan finns bland users
-    const result = users.find( ({ userName }) => userName === newUser.userName);
-    // console.log(result);
+  //   //hämta alla users
+  //   const users = JSON.parse(data);
+  //   // console.log(users);
 
-    if (result !== undefined) {
-      console.log("no registration, userName already exists");
-      res.json("userName already exists")
-    } else {
-      console.log("ok to register");
+  //   //kolla om användarnamnet redan finns bland users
+  //   const result = users.find( ({ userName }) => userName === newUser.userName);
+  //   // console.log(result);
 
-      //FRÅGA ÄR DETTA RANDOM KEYS?
-      //generate random key:
-      let key = rand.generateDigits(5);
-      // console.log(key);
+  //   if (result !== undefined) {
+  //     console.log("no registration, userName already exists");
+  //     res.json("userName already exists")
+  //   } else {
+  //     console.log("ok to register");
 
-      //FRÅGA BÖR ID KOMMA FÖRST I OBJEKTET, NU LÄGGS DET TILL SIST. ÄR DET OK ATT ANVÄNDA ASSIGN()? HETTE TYP ASSIGN API PÅ CANIUSE o då verkade det ok men ÄR DET SAMMA SOM nedan ASSIGN()?
-      //add random key to newUser:
-      Object.assign(newUser, {id: key});
-      // console.log(newUser);
-      // console.log(users);
+  //     //generate random key: LÄGGA TILL FLER SIFFROR
+  //     let key = rand.generateDigits(5);
 
-      //real password:
-      console.log(newUser.password);
-      //kryptera userPass och det är detta som ska sparas till backend
-      let cryptoPass = CryptoJS.AES.encrypt(newUser.password, "Salt Nyckel").toString();
-      // console.log(cryptoPass);
-      newUser.password = cryptoPass;
+  //     //FRÅGA BÖR ID KOMMA FÖRST I OBJEKTET, NU LÄGGS DET TILL SIST. ÄR DET OK ATT ANVÄNDA ASSIGN()? HETTE TYP ASSIGN API PÅ CANIUSE o då verkade det ok men ÄR DET SAMMA SOM nedan ASSIGN()?
+  //     //add random key to newUser:
+  //     Object.assign(newUser, {id: key});
+  //     // console.log(newUser);
+  //     // console.log(users);
 
-      //FRÅGA: varför går ej detta? Då blir lösen inte krypterat, varför? 
-      // let realPass = newUser.password;
-      // console.log(realPass);
-      // //kryptera userPass och det är detta som ska sparas till backend
-      // let cryptoPass = CryptoJS.AES.encrypt(realPass, "Salt Nyckel").toString();
-      // console.log(cryptoPass);
-      // realPass = cryptoPass;
-      // console.log(newUser);
+  //     //real password:
+  //     console.log(newUser.password);
+  //     //kryptera userPass och det är detta som ska sparas till backend
+  //     let cryptoPass = CryptoJS.AES.encrypt(newUser.password, "Salt Nyckel").toString();
+  //     // console.log(cryptoPass);
+  //     newUser.password = cryptoPass;
 
-      console.log(newUser);
+  //     //FRÅGA: varför går ej detta? Då blir lösen inte krypterat, varför? 
+  //     // let realPass = newUser.password;
+  //     // console.log(realPass);
+  //     // //kryptera userPass och det är detta som ska sparas till backend
+  //     // let cryptoPass = CryptoJS.AES.encrypt(realPass, "Salt Nyckel").toString();
+  //     // console.log(cryptoPass);
+  //     // realPass = cryptoPass;
+  //     // console.log(newUser);
 
-      //lägg till newUser till users
-      users.push(newUser);
-      // console.log(users);
+  //     console.log(newUser);
 
-      //spara users till users.json
-      fs.writeFile("users.json", JSON.stringify(users, null, 2), function(err) {
-        if (err) {
-          console.log(err);
-        };
-      });
-      res.json("newUser saved");
-    };
-  });
+  //     //lägg till newUser till users
+  //     users.push(newUser);
+  //     // console.log(users);
+
+  //     //spara users till users.json
+  //     fs.writeFile("users.json", JSON.stringify(users, null, 2), function(err) {
+  //       if (err) {
+  //         console.log(err);
+  //       };
+  //     });
+  //     res.json("newUser saved");
+  //   };
+  // });
 
 });
 

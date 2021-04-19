@@ -27,26 +27,32 @@ router.get('/register', function(req, res, next) {
   .then(results => {
     console.log(results);
 
-    if (results !== undefined) {
-      console.log("no registration, userName already exists");
-      res.json("userName already exists")
-    } else {
-      console.log("ok to register");
-    };
-
-
-    // let printUsers =`<div><h2>Våra users</h2>`
-    // for (user in results) {
-    //   printUsers += `<div>${results[user].firstName}</div>`
-    // }
-
-    // printUsers += `</div>`
-    // res.send(printUsers);
-    
+    // if (results !== undefined) {
+    //   console.log("no registration, userName already exists");
+    //   res.json("userName already exists")
+    // } else {
+    //   console.log("ok to register");
+    // };
 
     res.send(results);
   });
   
+});
+
+router.get('/add', function(req, res, next) {
+
+  res.send("hej");
+}); 
+router.post("/add", function(req, res) {
+
+  //kan skapa ett nytt objekt som vi fångat i ex ett formulär o lägga in inuti insertOne istället för req.body 
+  req.app.locals.db.collection("users").insertOne(req.body)
+  .then(result => {
+    console.log(result);
+    // res.redirect("/show");
+    res.send(result);
+  })
+
 });
 
 //skicka ny användare till servern. Spara i users.json

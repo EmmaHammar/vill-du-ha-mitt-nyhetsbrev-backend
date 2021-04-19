@@ -9,6 +9,7 @@
 npm install cors
 npm i random-key
 npm install crypto-js
+npm i mongodb 
 
 # Admin-login
 Admin-användarnamn: emma

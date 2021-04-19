@@ -17,8 +17,36 @@ router.get('/', function(req, res, next) {
 //varför behövs denna get? Här post ska skrivas ut?
 router.get('/register', function(req, res, next) {
 
-  res.send("hej från get register-routern");
 
+  let newUser = req.body;
+
+  //Vad är collection users? Hur få in jsonfilen eller ska den inte finnas?
+  // req.app.locals.db.collection("users").find("userName": newUser).toArray() FRÅGA: VARFÖR FUNKAR DET INTE ATT HA MED "USERNAME"?
+  req.app.locals.db.collection("users").find(newUser).toArray()
+
+  .then(results => {
+    console.log(results);
+
+    if (results !== undefined) {
+      console.log("no registration, userName already exists");
+      res.json("userName already exists")
+    } else {
+      console.log("ok to register");
+    };
+
+
+    // let printUsers =`<div><h2>Våra users</h2>`
+    // for (user in results) {
+    //   printUsers += `<div>${results[user].firstName}</div>`
+    // }
+
+    // printUsers += `</div>`
+    // res.send(printUsers);
+    
+
+    res.send(results);
+  });
+  
 });
 
 //skicka ny användare till servern. Spara i users.json

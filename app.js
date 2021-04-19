@@ -9,6 +9,22 @@ let adminRouter = require('./routes/admin');
 
 var app = express();
 
+const MongoClient = require("mongodb").MongoClient;
+
+//mongodb -> ändra till atlassis(?)
+MongoClient.connect("mongodb://127.0.0.1:27017", {
+    useUnifiedTopology: true
+})
+.then(client => {
+   console.log("Vi är uppkopplade mot databasen!"); 
+
+   // ett projekt vi kallar för usersbook
+   const db = client.db("usersbook");
+
+   //vi sparar detta till app.locals
+   app.locals.db = db;
+});
+
 app.use(logger('dev'));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));

@@ -21,13 +21,21 @@ router.get('/register', function(req, res, next) {
 
  
   req.app.locals.db.collection("users").find(newUser.userName).toArray()
-  // req.app.locals.db.collection("users").find( {"userName": newUser.userName} ).toArray()
   // req.app.locals.db.collection("users").find().toArray()
   .then(results => {
 
     //namnet 
-    console.log(results);
+    // console.log(results.userName);
     
+
+    // if (results.userName === newUser.userName) {
+    //   console.log("no registration, userName already exists");
+    //   res.json("userName already exists")
+    // } else {
+    //     console.log("ok to register");
+    // };
+
+
 
     // if (results !== undefined) {
     //   console.log("no registration, userName already exists");
@@ -47,7 +55,7 @@ router.get('/register', function(req, res, next) {
 router.post('/register', function(req, res) {
 
   // console.log(req.body);
-  let newUser = req.body;
+  // let newUser = req.body;
   // console.log(newUser);
 
   //kan skapa ett nytt objekt som vi fångat i ex ett formulär o lägga in inuti insertOne istället för req.body 

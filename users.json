@@ -16,5 +16,11 @@
     "password": "U2FsdGVkX1+T5sG31x2sWFFhhA/iuerHKdYpDUbxzug=",
     "subscription": false,
     "id": "68438"
+  },
+  {
+    "userName": "kajsa",
+    "password": "U2FsdGVkX1+ba4i2rfCsDTPaeqbio+jPw1JeL2cVuR4=",
+    "subscription": true,
+    "id": "44128"
   }
 ]

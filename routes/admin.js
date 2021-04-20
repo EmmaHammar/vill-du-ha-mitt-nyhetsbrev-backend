@@ -56,7 +56,7 @@ router.post('/', function(req, res) {
             adminLoginMsg = "admin exists";
             if (adminUser.adminPassword === result.adminPassword) {
                 console.log("login success");
-                res.redirect('/admin/loggedin')
+                res.redirect('/admin/loggedin/' + result.id)
                 // printUsers();
             } else {
                 console.log("error, wrong password");
@@ -72,8 +72,10 @@ router.post('/', function(req, res) {
 
 });
 
-router.get('/loggedin', function(req, res) {
-
+// router.get('/loggedin', function(req, res) {
+router.get('/loggedin/:id', function(req, res) {
+    let adminId = req.params.id;
+    
     let printUsers = htmlHead + `<h3>Registrerade användare</h3>`;
 
     fs.readFile('users.json', function(err, data) {
@@ -99,14 +101,15 @@ router.get('/loggedin', function(req, res) {
         };
 
         printUsers += 
-            `<a href="/admin/loggedin/subscribe" class="btn-fill">Se prenumerant-lista</a>
+            `<a href="/admin/loggedin/${adminId}/subscribe" class="btn-fill">Se prenumerant-lista</a>
             <a href="/admin">Logga ut</a>`;
         res.send(printUsers);
     });
     
 }); 
 
-router.get('/loggedin/subscribe', function(req, res) {
+router.get('/loggedin/:id/subscribe', function(req, res) {
+    let adminId = req.params.id;
 
     let printSubscription = htmlHead + `<h4>Prenumeranter</h4>`;
 
@@ -134,7 +137,7 @@ router.get('/loggedin/subscribe', function(req, res) {
             }
         };
 
-        printSubscription += `<a href="/admin/loggedin/">Tillbaka</a><br>`;
+        printSubscription += `<a href="/admin/loggedin/${adminId}">Tillbaka</a><br>`;
         res.send(printSubscription);
     });
 

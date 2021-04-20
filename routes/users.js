@@ -7,35 +7,50 @@ const CryptoJS = require("crypto-js");
 
 router.use(cors());
 
-/* GET users listing. */
+//printa ut alla
 router.get('/', function(req, res, next) {
 
   res.send('users root');
 
 });
 
+// en router visa specifik användare 
+
+//HÄMTA OCH VISA DATA UR VÅR MONGODB
 //Lägg in nya användare via Postman. Alla användare syns här: http://localhost:3000/users/register
 router.get('/register', function(req, res, next) {
 
   let newUser = req.body;
+  console.log(newUser);
 
- 
-  req.app.locals.db.collection("users").find(newUser.userName).toArray()
-  // req.app.locals.db.collection("users").find().toArray()
+//HÄMTA
+ //Hämta + kolla om newUser.userName finns i results[user].userName, hur skriva i find? Tidigare: const result = users.find( ({ userName }) => userName === newUser.userName);
+  // req.app.locals.db.collection("users").find(newUser.userName).toArray()
+  
+  //söka efter ett objekt
+  // req.app.locals.db.collection("users").find( {'firstName': findUser} ).toArray()
+
+  //Hämta alla: (behöver göra varje gång vi vill prata med databasen)
+  //Sparat users till en array som heter results
+  req.app.locals.db.collection("users").find().toArray()
   .then(results => {
 
-    //namnet 
+    // console.log(results);
+    //allas userName: 
     // console.log(results.userName);
     
+    for (user in results) {
+      // console.log(results[user].userName);
 
-    // if (results.userName === newUser.userName) {
-    //   console.log("no registration, userName already exists");
-    //   res.json("userName already exists")
-    // } else {
-    //     console.log("ok to register");
-    // };
+      //lägga i en post
+      //   if (results[user].userName === newUser.userName) {
+      //   console.log("no registration, userName already exists");
+      //   // res.json("userName already exists")
+      // } else {
+      //     console.log("ok to register");
+      // };
 
-
+    }
 
     // if (results !== undefined) {
     //   console.log("no registration, userName already exists");
@@ -46,24 +61,32 @@ router.get('/register', function(req, res, next) {
 
     res.send(results);
   });
+
+  // res.send("get routern /register")
   
 });
 
 
-
+//SPARA NYA OBJEKT IN I MONGODB
 //skicka ny användare till servern. Spara i users.json
 router.post('/register', function(req, res) {
 
   // console.log(req.body);
-  // let newUser = req.body;
-  // console.log(newUser);
+  let newUser = req.body;
+  // console.log(newUser); // prinst ex { userName: 'kalle3', password: 'adf', subscription: false }
 
+  //Det vi kör in:
+  // console.log(newUser.userName);
+
+  //SPARA
   //kan skapa ett nytt objekt som vi fångat i ex ett formulär o lägga in inuti insertOne istället för req.body 
   req.app.locals.db.collection("users").insertOne(req.body)
   .then(result => {
-    console.log(result);
+    // console.log(result);
     // res.redirect("/show");
-    res.send(result);
+   
+     //KOLLA OM DUBBLETT
+    res.json("newUser saved");
   })
   
 
@@ -89,7 +112,8 @@ router.post('/register', function(req, res) {
   //     //generate random key: LÄGGA TILL FLER SIFFROR
   //     let key = rand.generateDigits(5);
 
-  //     //FRÅGA BÖR ID KOMMA FÖRST I OBJEKTET, NU LÄGGS DET TILL SIST. ÄR DET OK ATT ANVÄNDA ASSIGN()? HETTE TYP ASSIGN API PÅ CANIUSE o då verkade det ok men ÄR DET SAMMA SOM nedan ASSIGN()?
+  //     //FRÅGA BÖR ID KOMMA FÖRST I OBJEKTET, NU LÄGGS DET TILL SIST. ÄR DET OK ATT ANVÄNDA ASSIGN()?
+  //     //HETTE TYP ASSIGN API PÅ CANIUSE o då verkade det ok men ÄR DET SAMMA SOM nedan ASSIGN()?
   //     //add random key to newUser:
   //     Object.assign(newUser, {id: key});
   //     // console.log(newUser);

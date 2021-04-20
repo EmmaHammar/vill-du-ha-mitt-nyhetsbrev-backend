@@ -28,17 +28,19 @@ router.post('/register', function(req, res) {
     console.log("results", results); 
 
       if ( results == "") {
-        console.log("newUser saved");
+        // console.log("newUser saved");
+        let randomKey = rand.generate(8);
+        Object.assign(newUser, {id: randomKey});
         
         req.app.locals.db.collection("users").insertOne(newUser)
           .then(result => { 
-            console.log("result saved to mongoDB", result);
-            res.json( {"code" : "newUser saved"} );
+            // console.log("saved to mongoDB", result);
+            console.log(" newUser.id",  newUser.id);
+            res.json( {"code" : "newUser saved", "id" : newUser.id} );
           });
-          // res.json( {"code" : "newUser saved"} );
 
       } else {
-        console.log("userName already exists");
+        // console.log("userName already exists");
         res.json( {"code" : "userName already exists"} );
       }
     

@@ -76,15 +76,14 @@ router.post("/userpage", function(req,res) {
 router.get('/userpage/:id', function(req, res, next) {
 
   let showUserId = req.params.id;
-  console.log("showUserId", showUserId);
 
   //hämta users
   req.app.locals.db.collection("users").find( {"id": showUserId} ).toArray()
   .then(results => {
-    console.log("om user finns i databasen visas hela användarens objekt, annars []", results);
+    // console.log("om user finns i databasen visas hela användarens objekt, annars []", results);
 
     if (results == "") {
-      console.log("denna userpage finns ej");
+      // console.log("denna userpage finns ej");
       res.json( {"code": "error"} )
 
     } else {
@@ -98,52 +97,73 @@ router.get('/userpage/:id', function(req, res, next) {
 
 
 router.post('/subscribe/:id', function(req, res) {
-  let getUser = req.body;
+  let findUser = req.body;
   // console.log("getUser", getUser);
 
   //HÄMTA
-  // req.app.locals.db.collection("users").find( {"userName":getUser.userName} ).toArray()
-  req.app.locals.db.collection("users").find().toArray()
+  req.app.locals.db.collection("users").find( {"userName":findUser.userName} ).toArray()
+  // req.app.locals.db.collection("users").find().toArray()
   .then(result => {
 
-    let allUsers = result; //array
+    console.log("result hela objektet", result);
+    // let allUsers = result; //array
     
     //HITTA 
-    for (user in allUsers) {
-      if (result[user].userName === getUser.userName) {
-        let findUser = result[user];
-        console.log("findUser-subscription före assign", findUser.subscription);
+    // for (user in allUsers) {
+    //   if (result[user].userName === getUser.userName) {
+    //     let findUser = result[user];
+    //     console.log("findUser-subscription före assign", findUser.subscription);
 
-        switch (findUser.subscription) {
+
+        //ÄNDRA
+        req.app.locals.db.collection("users").updateOne( {"subscription" : result[0].id}, {$set: {"subscription": result[0].subscription} }  )
+        .then(results => {
+            console.log("results i updateOne", results);
+        });
+
+        switch (result[0].subscription) {
           case true: 
             console.log("ändra till false");
-            findUser.subscription = false;
+            result[0].subscription = false;
             break;
           case false: 
             console.log("ändra till true");
-            findUser.subscription = true;
+            result[0].subscription = true;
             break;
         };
 
-        //ÄNDRA
-        // allUsers.push(findUser);
-        Object.assign(findUser, {subscription: findUser.subscription});
-        console.log("findUser-subscription after assign", findUser.subscription);
+        // Object.assign(findUser, {subscription: findUser.subscription});
+        console.log("result[0] after ÄNDRA", result[0]);
+      
+
+        // req.app.locals.db.collection("users").deleteMany( {"userName": "bill"} )
+        // .then(results => {
+        //     console.log(results);
+        // });
+
+        // req.app.locals.db.collection("users").countDocuments()
+        // .then(results => {
+        //     console.log("såhär många finns i databasen: ", results);
+        // });
+
         
         // SPARA 
-        // req.app.locals.db.collection("users").insertOne(findUser)
+        // req.app.locals.db.collection("users").insertOne( {updatedUser} )
         // .then(result => { 
-        //   console.log("result", result);
-        //   res.json( {"code": "Uppdaterat prenumerationsstatuset!", "subscription": findUser.subscription} );
+        //   // console.log("result", result);
+        //   // console.log("allUsers after saving result[0]", allUsers);
+        //   res.json( {"code": "Uppdaterat prenumerationsstatuset!", "subscription": result[0].subscription} );
         // });
+
+        
 
         //The index is not present in your collection, in which you are trying insert.??
         //(node:15012) UnhandledPromiseRejectionWarning: MongoError: E11000 duplicate key error collection: usersbook.users index: _id_ dup key: { _id: ObjectId('607ebc1e5c85b91dd98d6025') }
-        res.json( {"code": "Uppdaterat prenumerationsstatuset!", "subscription": findUser.subscription} ); //ta bort denna rad sen när jag lyckats SPARA
+        res.json( {"code": "Uppdaterat prenumerationsstatuset!", "subscription": result[0].subscription} ); //ta bort denna rad sen när jag lyckats SPARA
 
-      }
+    //   }
 
-    }
+    // }
     
   });
   
@@ -156,9 +176,36 @@ module.exports = router;
 
 
 
+//använda updateOne() för att uppdatera subscription status? Obs behöver radera databasen först så users id är unika.
+//req.app.locals.db.collection("cars").updateOne( {"carVin" : xksdguerg8}, {$set: {"color": "Black"} }  )
+//.then(results => {
+//     console.log(results);
+// });
 
+//tar bort den första som matchar o utför operationen
+//req.app.locals.db.collection("cars").deleteOne( {"carVin" : xksdguerg8} )
+//.then(results => {
+//     console.log(results);
+// });
 
+//ta bort alla GMC
+//req.app.locals.db.collection("cars").deleteMany( {"carMake" : "GMC"} )
+//.then(results => {
+//     console.log(results);
+// });
 
+//kontrollera att allt är borta, får ett nummer i terminalen:
+//ta bort alla GMC
+//req.app.locals.db.collection("cars").countDocuments()
+//.then(results => {
+//     console.log(results);
+// });
+
+//POST
+//insertOne(req.body)
+//insertMany(req.body)
+
+//===========================slask
 // router.get('/userpage/:id', function(req, res, next) {
 
 //   let showUserId = req.params.id;

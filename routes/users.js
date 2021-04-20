@@ -7,87 +7,55 @@ const CryptoJS = require("crypto-js");
 
 router.use(cors());
 
-//printa ut alla
+//Denna router vanligtvis printar ut alla
 router.get('/', function(req, res, next) {
 
   res.send('users root');
 
 });
+// en annan get-router visa specifik användare 
+//Behöver inte ha en get om jag har en post, kan ha en post själv.
 
-// en router visa specifik användare 
-
-//HÄMTA OCH VISA DATA UR VÅR MONGODB
-//Lägg in nya användare via Postman. Alla användare syns här: http://localhost:3000/users/register
-router.get('/register', function(req, res, next) {
-
-  let newUser = req.body;
-  console.log(newUser);
-
-//HÄMTA
- //Hämta + kolla om newUser.userName finns i results[user].userName, hur skriva i find? Tidigare: const result = users.find( ({ userName }) => userName === newUser.userName);
-  // req.app.locals.db.collection("users").find(newUser.userName).toArray()
-  
-  //söka efter ett objekt
-  // req.app.locals.db.collection("users").find( {'firstName': findUser} ).toArray()
-
-  //Hämta alla: (behöver göra varje gång vi vill prata med databasen)
-  //Sparat users till en array som heter results
-  req.app.locals.db.collection("users").find().toArray()
-  .then(results => {
-
-    // console.log(results);
-    //allas userName: 
-    // console.log(results.userName);
-    
-    for (user in results) {
-      // console.log(results[user].userName);
-
-      //lägga i en post
-      //   if (results[user].userName === newUser.userName) {
-      //   console.log("no registration, userName already exists");
-      //   // res.json("userName already exists")
-      // } else {
-      //     console.log("ok to register");
-      // };
-
-    }
-
-    // if (results !== undefined) {
-    //   console.log("no registration, userName already exists");
-    //   res.json("userName already exists")
-    // } else {
-    //   console.log("ok to register");
-    // };
-
-    res.send(results);
-  });
-
-  // res.send("get routern /register")
-  
-});
-
-
-//SPARA NYA OBJEKT IN I MONGODB
-//skicka ny användare till servern. Spara i users.json
+//Spara nya användare till databasen
 router.post('/register', function(req, res) {
 
-  // console.log(req.body);
+  //ny användare som vill regga sig
   let newUser = req.body;
-  // console.log(newUser); // prinst ex { userName: 'kalle3', password: 'adf', subscription: false }
-
-  //Det vi kör in:
   // console.log(newUser.userName);
+  let codeRegister; 
 
-  //SPARA
-  //kan skapa ett nytt objekt som vi fångat i ex ett formulär o lägga in inuti insertOne istället för req.body 
-  req.app.locals.db.collection("users").insertOne(req.body)
-  .then(result => {
-    // console.log(result);
-    // res.redirect("/show");
-   
-     //KOLLA OM DUBBLETT
-    res.json("newUser saved");
-  })
+  //Hämta databasen MongoDB (behöver göra req.app.locals.db.collection("users") varje gång vi vill prata med databasen)
+  // req.app.locals.db.collection("users").find().toArray()
+  req.app.locals.db.collection("users").find( {"userName":newUser.userName}).toArray()
+  .then(results => {
+    console.log("results", results); 
+
+      if ( results == "") {
+        console.log("newUser saved");
+        res.json( {"code" : "newUser saved"} );
+        
+      } else {
+        console.log("userName already exists");
+        res.json( {"code" : "userName already exists"} );
+
+          // req.app.locals.db.collection("users").insertOne(newUser)
+          // .then(result => {
+      //       // console.log(result); 
+
+          // codeRegister = {"code":"newUser saved"};
+          
+      //     });
+      // res.json(codeRegister)
+
+      }
+    // };
+      // res.send(answerRegister);
+      // res.json(results); //Sparat users till en array som heter results:
+  });
+
+
+
+
   
 
   // fs.readFile("users.json", function(err, data) {
@@ -158,6 +126,38 @@ router.post('/register', function(req, res) {
 //   res.send("hej från get login-routern");
 
 // });
+
+
+router.post("/check", function(req,res) {
+  let checkUser = req.body;
+  console.log(checkUser);
+
+  req.app.locals.db.collection("users").find( {"userName":checkUser.userName}).toArray()
+  .then(results => {
+
+    //if kolla om det results är [] = ej hittat användare
+    if (results == "") {
+      console.log("ingen user hittad");
+      res.json( {"code": "error"} )
+  
+    } else {
+      console.log("results", results);
+      // console.log("results.password", results[0].password);
+      // console.log("checkUser.password", checkUser.password);
+      if (results[0].password === checkUser.password) {
+        console.log("user och lösenord stämde");
+        res.json( {"code": "ok", "userId": results[0].id} ) //skicka tillbaka ett objekt: ett ok-code och id-et för användaren
+      } else {
+        console.log("fel lösenord");
+        res.json( {"code": "error"} )
+      }
+    }
+
+   
+    // res.json(results);
+  })
+})
+
 
 // router.post('/login', function(req, res) {
 

@@ -53,3 +53,9 @@ Frontend applikationen är deployad på Github pages
 DONE Backend servern är deployad på Heroku
 Databasen är lagrad på MongoDB Atlas
 För att få VG på uppgiften så skall även en skriven reflektion som når upp till kravet av nivå 2 (reflekterande text) lämnas in tillsammans med länkar till repos och projektet/sidan i produktion (live länk).
+
+Länk från mongodb atlas:
+mongodb+srv://jagheteremma:<password>@cluster0.ckgwo.mongodb.net/myFirstDatabase?retryWrites=true&w=majority
+
+Klistra in:
+mongodb+srv://jagheteremma:jagheteremma@cluster0.ckgwo.mongodb.net/myFirstDatabase?retryWrites=true&w=majority

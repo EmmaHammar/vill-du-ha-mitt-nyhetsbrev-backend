@@ -94,78 +94,60 @@ router.get('/userpage/:id', function(req, res, next) {
 
   });
 
-});
+}); 
 
 
 router.post('/subscribe/:id', function(req, res) {
   let getUser = req.body;
-  console.log("getUser", getUser);
+  // console.log("getUser", getUser);
 
-  req.app.locals.db.collection("users").find( {"userName":getUser.userName} ).toArray()
+  //HÄMTA
+  // req.app.locals.db.collection("users").find( {"userName":getUser.userName} ).toArray()
+  req.app.locals.db.collection("users").find().toArray()
   .then(result => {
 
-    // console.log("result", result); //användaren jag söker
-    let updatedUser = result[0];
-    console.log("updatedUser before assign", updatedUser);
-
-    switch (updatedUser.subscription) {
-      case true: 
-        console.log("ändra till false");
-        updatedUser.subscription = false;
-        break;
-      case false: 
-        console.log("ändra till true");
-        updatedUser.subscription = true;
-        break;
-    };
-
-    Object.assign(updatedUser, updatedUser.subscription);
-    console.log("updatedUser after assign, spara till mongoDB", updatedUser);
-
+    let allUsers = result; //array
     
-    req.app.locals.db.collection("users").insertOne(updatedUser)
-    .then(result => { 
-      
-    });
-    res.send( {"code": "Uppdaterat prenumerationsstatuset!"} );
+    //HITTA 
+    for (user in allUsers) {
+      if (result[user].userName === getUser.userName) {
+        let findUser = result[user];
+        console.log("findUser-subscription före assign", findUser.subscription);
+
+        switch (findUser.subscription) {
+          case true: 
+            console.log("ändra till false");
+            findUser.subscription = false;
+            break;
+          case false: 
+            console.log("ändra till true");
+            findUser.subscription = true;
+            break;
+        };
+
+        //ÄNDRA
+        // allUsers.push(findUser);
+        Object.assign(findUser, {subscription: findUser.subscription});
+        console.log("findUser-subscription after assign", findUser.subscription);
+        
+        // SPARA 
+        // req.app.locals.db.collection("users").insertOne(findUser)
+        // .then(result => { 
+        //   console.log("result", result);
+        //   res.json( {"code": "Uppdaterat prenumerationsstatuset!", "subscription": findUser.subscription} );
+        // });
+
+        //The index is not present in your collection, in which you are trying insert.??
+        //(node:15012) UnhandledPromiseRejectionWarning: MongoError: E11000 duplicate key error collection: usersbook.users index: _id_ dup key: { _id: ObjectId('607ebc1e5c85b91dd98d6025') }
+        res.json( {"code": "Uppdaterat prenumerationsstatuset!", "subscription": findUser.subscription} ); //ta bort denna rad sen när jag lyckats SPARA
+
+      }
+
+    }
+    
   });
-
+  
 });
-
-//============================
-// //ÄNDRA TILL EN POST?
-// router.get('/subscribe/:id', function(req, res, next) {
-
-//   let showUserId = req.params.id;
-//   req.app.locals.db.collection("users").find( {"id": showUserId} ).toArray()
-//   .then(results => {
-
-//     console.log("results sub/:id", results);  
-//     console.log(results[0].subscription);  
-//     let updatedUser = results[0];
-//     console.log("updatedUser before assign", updatedUser);
-
-//     switch (updatedUser.subscription) {
-//             case true: 
-//               console.log("ändra till false");
-//               updatedUser.subscription = false;
-//               break;
-//             case false: 
-//               console.log("ändra till true");
-//               updatedUser.subscription = true;
-//               break;
-//     };
-
-//     // users.push(updatedUser);
-//     Object.assign(updatedUser, updatedUser.subscription);
-//     console.log("updatedUser after assign", updatedUser);
-//     //req.app.locals.db.collection("users").insertOne(updatedUser)
-//     //.then(result => {});
-
-//   });
-//   res.json( {"code": "hej från subscribe" });
-
-// });
 
 module.exports = router;
 
@@ -314,11 +296,6 @@ module.exports = router;
   //     res.json("newUser saved");
   //   };
   // });
-
-
-
-
-
 
 
 // router.get('/subscribe/:id', function(req, res, next) {

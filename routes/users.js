@@ -13,19 +13,16 @@ router.get('/', function(req, res, next) {
   res.send('users root');
 
 });
-// en annan get-router visa specifik användare 
-//Behöver inte ha en get om jag har en post, kan ha en post själv.
 
-//Spara nya användare till databasen
 router.post('/register', function(req, res) {
-
-  //ny användare som vill regga sig
+  //Denna router sparar nya användare till databasen
+  
   let newUser = req.body;
 
-  //Hämta databasen MongoDB (behöver göra req.app.locals.db.collection("users") varje gång vi vill prata med databasen)
-  req.app.locals.db.collection("users").find( {"userName":newUser.userName}).toArray()
+  //Hämta MongoDB
+  req.app.locals.db.collection("users").find( {"userName":newUser.userName} ).toArray()
   .then(results => {
-    console.log("results", results); 
+    // console.log("results", results); 
 
       if ( results == "") {
         // console.log("newUser saved");
@@ -35,7 +32,7 @@ router.post('/register', function(req, res) {
         req.app.locals.db.collection("users").insertOne(newUser)
           .then(result => { 
             // console.log("saved to mongoDB", result);
-            console.log(" newUser.id",  newUser.id);
+            // console.log(" newUser.id",  newUser.id);
             res.json( {"code" : "newUser saved", "id" : newUser.id} );
           });
 
@@ -46,8 +43,214 @@ router.post('/register', function(req, res) {
     
   });
 
+});
+
+//Check if password and username is ok at login
+router.post("/userpage", function(req,res) {
+
+  let checkUser = req.body;
+  console.log(checkUser);
+
+  req.app.locals.db.collection("users").find( {"userName":checkUser.userName}).toArray()
+  .then(results => {
+
+    //if kolla om det results är [] = ej hittat användare
+    if (results == "") {
+      console.log("ingen user hittad");
+      res.json( {"code": "error"} )
+  
+    } else {
+      // console.log("results", results);
+      if (results[0].password === checkUser.password) {
+        console.log("user och lösenord stämde");
+        res.json( {"code": "ok", "userId": results[0].id} ) //skicka tillbaka ett objekt: ett ok-code och id-et för användaren
+      } else {
+        console.log("fel lösenord");
+        res.json( {"code": "error"} )
+      }
+    }   
+  })
+
+});
+
+router.get('/userpage/:id', function(req, res, next) {
+
+  let showUserId = req.params.id;
+  console.log("showUserId", showUserId);
+
+  //hämta users
+  req.app.locals.db.collection("users").find( {"id": showUserId} ).toArray()
+  .then(results => {
+    console.log("om user finns i databasen visas hela användarens objekt, annars []", results);
+
+    if (results == "") {
+      console.log("denna userpage finns ej");
+      res.json( {"code": "error"} )
+
+    } else {
+        res.json( {"userName": results[0].userName, "subscription": results[0].subscription } )
+
+    }
+
+  });
+
+});
 
 
+router.post('/subscribe/:id', function(req, res) {
+  let getUser = req.body;
+  console.log("getUser", getUser);
+
+  req.app.locals.db.collection("users").find( {"userName":getUser.userName} ).toArray()
+  .then(result => {
+
+    // console.log("result", result); //användaren jag söker
+    let updatedUser = result[0];
+    console.log("updatedUser before assign", updatedUser);
+
+    switch (updatedUser.subscription) {
+      case true: 
+        console.log("ändra till false");
+        updatedUser.subscription = false;
+        break;
+      case false: 
+        console.log("ändra till true");
+        updatedUser.subscription = true;
+        break;
+    };
+
+    Object.assign(updatedUser, updatedUser.subscription);
+    console.log("updatedUser after assign, spara till mongoDB", updatedUser);
+
+    
+    req.app.locals.db.collection("users").insertOne(updatedUser)
+    .then(result => { 
+      
+    });
+    res.send( {"code": "Uppdaterat prenumerationsstatuset!"} );
+  });
+
+});
+
+//============================
+// //ÄNDRA TILL EN POST?
+// router.get('/subscribe/:id', function(req, res, next) {
+
+//   let showUserId = req.params.id;
+//   req.app.locals.db.collection("users").find( {"id": showUserId} ).toArray()
+//   .then(results => {
+
+//     console.log("results sub/:id", results);  
+//     console.log(results[0].subscription);  
+//     let updatedUser = results[0];
+//     console.log("updatedUser before assign", updatedUser);
+
+//     switch (updatedUser.subscription) {
+//             case true: 
+//               console.log("ändra till false");
+//               updatedUser.subscription = false;
+//               break;
+//             case false: 
+//               console.log("ändra till true");
+//               updatedUser.subscription = true;
+//               break;
+//     };
+
+//     // users.push(updatedUser);
+//     Object.assign(updatedUser, updatedUser.subscription);
+//     console.log("updatedUser after assign", updatedUser);
+//     //req.app.locals.db.collection("users").insertOne(updatedUser)
+//     //.then(result => {});
+
+//   });
+//   res.json( {"code": "hej från subscribe" });
+
+// });
+
+module.exports = router;
+
+
+
+
+
+
+
+
+
+// router.get('/userpage/:id', function(req, res, next) {
+
+//   let showUserId = req.params.id;
+//   console.log(showUserId);
+// //   fs.readFile('users.json', function(err, data) {
+// //     if (err) {
+// //       console.log(err);
+// //     }
+// //     //hämta alla users i users.json
+// //     const users = JSON.parse(data);
+// //     console.log(users);
+
+// //     let showUser = users.find( ({id}) => id === showUserId);
+// //     // console.log(showUser);
+    
+// //     res.json(showUser.subscription);
+// //   });
+
+//   res.send("hej från userpage/:id");
+// });
+
+
+
+// router.post('/login', function(req, res) {
+
+  //   // console.log(req.body);
+    // let user = req.body;
+    // console.log("user", user);
+  
+  //   fs.readFile("users.json", function(err, data) {
+  //     if (err) {
+  //       console.log(err);
+  //     }
+  
+  //     //hämta users
+  //     const users = JSON.parse(data);
+  //     // console.log(users);
+  
+  //     //söka efter userName från webbläsaren i users
+  //     const result = users.find( ({ userName }) => userName === user.userName);
+  //     // console.log(result);
+  //     // console.log(user);
+  //     // console.log(userName); //FRÅGA VARFÖR FÅR JAG ERROR OM JAG KONSOLLLOGGAR DETTA? ÄR INTE USERNAME REFERERENS TILL USERNAME I JSONFILEN? ELLER VAD ÄR USERNAME?
+  
+  //     //om user finns i users
+  //     if (result !== undefined) {
+  //       answerLogin = {"result": "user finns"};
+  
+  //       //pass from json
+  //       // console.log(result.password); 
+  
+  //       let originalPass = CryptoJS.AES.decrypt(result.password, "Salt Nyckel").toString(CryptoJS.enc.Utf8);
+  //       // console.log(originalPass);
+  
+  //       //pass from webbläsaren
+  //       // console.log(req.body.password);
+  
+  //       //kolla om password och användarnamn stämmer
+  //       if (originalPass === req.body.password) {
+  //       // answerLogin = {"subscription": result.subscription, "id": result.id};
+  //       answerLogin = {"id": result.id};
+  //       } else {
+  //         answerLogin = {"result": "error fel lösenord"}
+  //       }
+  
+  //     } else { //om user ej finns
+  //       answerLogin = {"result": "error user finns ej"};
+  //     };
+  //     //skickar tillbaka resultatet till webbläsaren: 
+  //     res.json(answerLogin);
+  //   });
+  
+  //   res.send("hej från post login")
+  // });
 
   
 
@@ -112,116 +315,11 @@ router.post('/register', function(req, res) {
   //   };
   // });
 
-});
-
-// router.get('/login', function(req, res, next) {
-
-//   res.send("hej från get login-routern");
-
-// });
 
 
-router.post("/check", function(req,res) {
-  let checkUser = req.body;
-  console.log(checkUser);
-
-  req.app.locals.db.collection("users").find( {"userName":checkUser.userName}).toArray()
-  .then(results => {
-
-    //if kolla om det results är [] = ej hittat användare
-    if (results == "") {
-      console.log("ingen user hittad");
-      res.json( {"code": "error"} )
-  
-    } else {
-      console.log("results", results);
-      // console.log("results.password", results[0].password);
-      // console.log("checkUser.password", checkUser.password);
-      if (results[0].password === checkUser.password) {
-        console.log("user och lösenord stämde");
-        res.json( {"code": "ok", "userId": results[0].id} ) //skicka tillbaka ett objekt: ett ok-code och id-et för användaren
-      } else {
-        console.log("fel lösenord");
-        res.json( {"code": "error"} )
-      }
-    }
-
-   
-    // res.json(results);
-  })
-})
 
 
-// router.post('/login', function(req, res) {
 
-//   // console.log(req.body);
-//   let user = req.body;
-//   // console.log(user);
-
-//   fs.readFile("users.json", function(err, data) {
-//     if (err) {
-//       console.log(err);
-//     }
-
-//     //hämta users
-//     const users = JSON.parse(data);
-//     // console.log(users);
-
-//     //söka efter userName från webbläsaren i users
-//     const result = users.find( ({ userName }) => userName === user.userName);
-//     // console.log(result);
-//     // console.log(user);
-//     // console.log(userName); //FRÅGA VARFÖR FÅR JAG ERROR OM JAG KONSOLLLOGGAR DETTA? ÄR INTE USERNAME REFERERENS TILL USERNAME I JSONFILEN? ELLER VAD ÄR USERNAME?
-
-//     //om user finns i users
-//     if (result !== undefined) {
-//       answerLogin = {"result": "user finns"};
-
-//       //pass from json
-//       // console.log(result.password); 
-
-//       let originalPass = CryptoJS.AES.decrypt(result.password, "Salt Nyckel").toString(CryptoJS.enc.Utf8);
-//       // console.log(originalPass);
-
-//       //pass from webbläsaren
-//       // console.log(req.body.password);
-
-//       //kolla om password och användarnamn stämmer
-//       if (originalPass === req.body.password) {
-//       // answerLogin = {"subscription": result.subscription, "id": result.id};
-//       answerLogin = {"id": result.id};
-//       } else {
-//         answerLogin = {"result": "error fel lösenord"}
-//       }
-
-//     } else { //om user ej finns
-//       answerLogin = {"result": "error user finns ej"};
-//     };
-//     //skickar tillbaka resultatet till webbläsaren: 
-//     res.json(answerLogin);
-//   });
-
-// });
-
-// router.get('/userpage/:id', function(req, res, next) {
-
-//   let showUserId = req.params.id;
-//   // console.log(showUserId);
-//   fs.readFile('users.json', function(err, data) {
-//     if (err) {
-//       console.log(err);
-//     }
-//     //hämta alla users i users.json
-//     const users = JSON.parse(data);
-//     console.log(users);
-
-//     let showUser = users.find( ({id}) => id === showUserId);
-//     // console.log(showUser);
-    
-//     res.json(showUser.subscription);
-//   });
-
-// });
 
 // router.get('/subscribe/:id', function(req, res, next) {
 
@@ -265,4 +363,4 @@ router.post("/check", function(req,res) {
 
 // });
 
-module.exports = router;
+

@@ -21,36 +21,27 @@ router.post('/register', function(req, res) {
 
   //ny användare som vill regga sig
   let newUser = req.body;
-  // console.log(newUser.userName);
-  let codeRegister; 
 
   //Hämta databasen MongoDB (behöver göra req.app.locals.db.collection("users") varje gång vi vill prata med databasen)
-  // req.app.locals.db.collection("users").find().toArray()
   req.app.locals.db.collection("users").find( {"userName":newUser.userName}).toArray()
   .then(results => {
     console.log("results", results); 
 
       if ( results == "") {
         console.log("newUser saved");
-        res.json( {"code" : "newUser saved"} );
         
+        req.app.locals.db.collection("users").insertOne(newUser)
+          .then(result => { 
+            console.log("result saved to mongoDB", result);
+            res.json( {"code" : "newUser saved"} );
+          });
+          // res.json( {"code" : "newUser saved"} );
+
       } else {
         console.log("userName already exists");
         res.json( {"code" : "userName already exists"} );
-
-          // req.app.locals.db.collection("users").insertOne(newUser)
-          // .then(result => {
-      //       // console.log(result); 
-
-          // codeRegister = {"code":"newUser saved"};
-          
-      //     });
-      // res.json(codeRegister)
-
       }
-    // };
-      // res.send(answerRegister);
-      // res.json(results); //Sparat users till en array som heter results:
+    
   });
 
 

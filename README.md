@@ -50,14 +50,8 @@ DONE 6. Nya användare får randomiserade nycklar som identifierar dem.
 DONE 7. En administratör skall kunna logga in på express servern och där kunna se alla registrerade användare samt kunna se en lista på alla de mailadresser som prenumererar på ett nyhetsbrev.
 
 VG krav
-Lösenorden som sparas skall vara krypterade.
+DONE Lösenorden som sparas skall vara krypterade.
 Frontend applikationen är deployad på Github pages
-DONE Backend servern är deployad på Heroku
+Backend servern är deployad på Heroku
 DONE Databasen är lagrad på MongoDB Atlas
 För att få VG på uppgiften så skall även en skriven reflektion som når upp till kravet av nivå 2 (reflekterande text) lämnas in tillsammans med länkar till repos och projektet/sidan i produktion (live länk).
-
-Länk från mongodb atlas:
-mongodb+srv://jagheteremma:<password>@cluster0.ckgwo.mongodb.net/myFirstDatabase?retryWrites=true&w=majority
-
-Klistra in:
-mongodb+srv://jagheteremma:jagheteremma@cluster0.ckgwo.mongodb.net/myFirstDatabase?retryWrites=true&w=majority

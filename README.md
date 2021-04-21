@@ -12,7 +12,7 @@ npm install crypto-js
 npm i mongodb 
 
 # Admin-login
-//Lägga till länk
+//Lägga till länk heroku
 Admin-användarnamn: emma
 Admin-lösenord: test1
 
@@ -41,17 +41,17 @@ Kravlista:
 G Krav
 1. Frontend applikationen (för besökare/användare) är uppsatt enligt headless principer.
 2. Administrationsgränssnittet skall vara uppsatt enligt monolit principer.
-3. Nya användare som sparas i frontend gränssittet skall sparas i en MongoDB databas.
+DONE 3. Nya användare som sparas i frontend gränssittet skall sparas i en MongoDB databas.
 DONE 4. En registrerad användare skall kunna logga in på frontend applikationen 
-DONE 5. och där kunna ändra sin  prenumerationsstatus.
+ 5. och där kunna ändra sin  prenumerationsstatus.
 DONE 6. Nya användare får randomiserade nycklar som identifierar dem.
 DONE 7. En administratör skall kunna logga in på express servern och där kunna se alla registrerade användare samt kunna se en lista på alla de mailadresser som prenumererar på ett nyhetsbrev.
 
 VG krav
-DONE Lösenorden som sparas skall vara krypterade.
+Lösenorden som sparas skall vara krypterade.
 Frontend applikationen är deployad på Github pages
 DONE Backend servern är deployad på Heroku
-Databasen är lagrad på MongoDB Atlas
+DONE Databasen är lagrad på MongoDB Atlas
 För att få VG på uppgiften så skall även en skriven reflektion som når upp till kravet av nivå 2 (reflekterande text) lämnas in tillsammans med länkar till repos och projektet/sidan i produktion (live länk).
 
 Länk från mongodb atlas:

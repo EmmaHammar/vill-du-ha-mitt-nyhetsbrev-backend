@@ -12,8 +12,8 @@ var app = express();
 const MongoClient = require("mongodb").MongoClient;
 
 //mongodb -> ändra till atlassis(?)
-MongoClient.connect("mongodb://127.0.0.1:27017", {
-    // MongoClient.connect("mongodb+srv://jagheteremma:<password>@cluster0.ckgwo.mongodb.net/myFirstDatabase?retryWrites=true&w=majority", { //vad skriva på myFirstDatabase? 
+// MongoClient.connect("mongodb://127.0.0.1:27017", {
+MongoClient.connect("mongodb+srv://jagheteremma:jagheteremma@cluster0.ckgwo.mongodb.net/newsletter2?retryWrites=true&w=majority", { //vad skriva på myFirstDatabase? 
     useUnifiedTopology: true
 })
 .then(client => {

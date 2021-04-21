@@ -7,7 +7,6 @@ const CryptoJS = require("crypto-js");
 
 router.use(cors());
 
-//Denna router vanligtvis printar ut alla
 router.get('/', function(req, res, next) {
 
   res.send('users root');
@@ -15,17 +14,7 @@ router.get('/', function(req, res, next) {
 });
 
 router.post('/register', function(req, res) {
-  //Denna router sparar nya användare till databasen
-  
-  // let newUser = 
-  //   {
-  //     id: randomKey,
-  //     userName: req.body.userName,
-  //     password: cryptoPass,
-  //     subscription: false
-  //   };
-
-  // let newUser = req.body;
+  //This router saves new users to MongoDB 
 
   //Hämta MongoDB
   req.app.locals.db.collection("users").find( {"userName":req.body.userName} ).toArray()
@@ -60,59 +49,34 @@ router.post('/register', function(req, res) {
     
   });
 
-
-
-
-
-  // let newUser = req.body;
-
-  // //Hämta MongoDB
-  // req.app.locals.db.collection("users").find( {"userName":newUser.userName} ).toArray()
-  // .then(results => {
-  //   // console.log("results", results); 
-
-  //     if ( results == "") {
-  //       // console.log("newUser saved");
-  //       let randomKey = rand.generate(8);
-  //       Object.assign(newUser, {id: randomKey});
-        
-  //       req.app.locals.db.collection("users").insertOne(newUser)
-  //         .then(result => { 
-  //           // console.log("saved to mongoDB", result);
-  //           // console.log(" newUser.id",  newUser.id);
-  //           res.json( {"code" : "newUser saved", "id" : newUser.id} );
-  //         });
-
-  //     } else {
-  //       // console.log("userName already exists");
-  //       res.json( {"code" : "userName already exists"} );
-  //     }
-    
-  // });
-
 });
 
-//Check if password and username is ok at login
 router.post("/userpage", function(req,res) {
+//This router makes login checks 
 
   let checkUser = req.body;
-  console.log(checkUser);
+  // console.log("checkUser", checkUser);
 
   req.app.locals.db.collection("users").find( {"userName":checkUser.userName}).toArray()
   .then(results => {
 
     //if kolla om det results är [] = ej hittat användare
     if (results == "") {
-      console.log("ingen user hittad");
+      // console.log("ingen user hittad");
       res.json( {"code": "error"} )
   
     } else {
-      // console.log("results", results);
-      if (results[0].password === checkUser.password) {
-        console.log("user och lösenord stämde");
-        res.json( {"code": "ok", "userId": results[0].id} ) //skicka tillbaka ett objekt: ett ok-code och id-et för användaren
+      // console.log("pass in MongoDB is:", results[0].password);
+  
+      let originalPass = CryptoJS.AES.decrypt(results[0].password, "Salt Nyckel").toString(CryptoJS.enc.Utf8);
+      // console.log("originalPass", originalPass);
+      // console.log("checkUsers pass:", checkUser.password);
+
+      if (originalPass === checkUser.password) {
+        // console.log("user och lösenord stämde");
+        res.json( {"code": "ok", "userId": results[0].id} ) //skixkar tillb code + id
       } else {
-        console.log("fel lösenord");
+        // console.log("fel lösenord");
         res.json( {"code": "error"} )
       }
     }   
@@ -135,17 +99,15 @@ router.get('/userpage/:id', function(req, res, next) {
 
     } else {
         res.json( {"userName": results[0].userName, "subscription": results[0].subscription } )
-
     }
 
   });
 
 }); 
 
-
 router.post('/subscribe/:id', function(req, res) {
   let findUser = req.body;
-  //HÄMTA
+  // get/find
   req.app.locals.db.collection("users").find( {"userName":findUser.userName} ).toArray()
   .then(result => {
 
@@ -162,17 +124,14 @@ router.post('/subscribe/:id', function(req, res) {
             break;
         };
 
-        console.log("result[0].subscription after switch", result[0].subscription);
-        //ÄNDRA (och SPARA - den verkar spara?)
+        // console.log("result[0].subscription after switch", result[0].subscription);
+        //change/save
         req.app.locals.db.collection("users").updateOne( {"id" : result[0].id}, {$set: {"subscription": result[0].subscription} }  )
         .then(result => {
-            // console.log("findUser i databasen efter $set", result[0]);
         });
-      
-        console.log("result[0] after $set", result[0]);
+        // console.log("result[0] after $set", result[0]);
 
         res.json( {"code": "Uppdaterat prenumerationsstatuset!", "subscription": result[0].subscription} ); 
-    
   });
   
 });

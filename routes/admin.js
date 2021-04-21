@@ -98,6 +98,9 @@ router.get('/loggedin/:id', function(req, res) {
                 console.log(printUsers);
             printUsers += userTemplate;
         };
+        printUsers += 
+        `<a href="/admin/loggedin/${adminId}/subscribe" class="btn-fill">Se prenumerant-lista</a>
+        <a href="/admin">Logga ut</a>`;
         res.send(printUsers);
     });
     

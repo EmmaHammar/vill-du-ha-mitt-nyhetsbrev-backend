@@ -13,6 +13,8 @@ npm i mongodb
 
 # Admin-login
 Heroku-länk: https://vill-du-ha-mitt-nyhetsbrev-be.herokuapp.com/ OBS kolla error!!
+
+Expresserver-länk: http://localhost:3000/admin
 Admin-användarnamn: emma
 Admin-lösenord: test1
 

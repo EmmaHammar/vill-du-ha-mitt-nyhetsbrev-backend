@@ -24,7 +24,6 @@ router.get('/', function(req, res, next) {
         </form>
     </div>`;
   res.send(printAdminLoginTemplate);
-
 });
 
 router.post('/', function(req, res) {
@@ -62,12 +61,10 @@ router.post('/', function(req, res) {
             res.json(adminLoginMsg);
         }
     });
-
 });
 
 router.get('/loggedin/:id', function(req, res) {
     let adminId = req.params.id;
-
     let printUsers = htmlHead + `<h3>Registrerade användare</h3>`;
 
     //Hämta alla users from MongoDB
@@ -93,14 +90,11 @@ router.get('/loggedin/:id', function(req, res) {
         `<a href="/admin/loggedin/${adminId}/subscribe" class="btn-fill">Se prenumerant-lista</a>
         <a href="/admin">Logga ut</a>`;
         res.send(printUsers);
-
     });
-    
 }); 
 
 router.get('/loggedin/:id/subscribe', function(req, res) {
     let adminId = req.params.id;
-
     let printSubscription = htmlHead + `<h4>Prenumeranter</h4>`;
 
     //Hämta alla subscribers from MongoDB
@@ -108,15 +102,12 @@ router.get('/loggedin/:id/subscribe', function(req, res) {
     .then(results => {
 
         if (results == "" ) {
-            console.log("Vi har inga prenumeranter");
+            // console.log("Vi har inga prenumeranter");
             res.json( {"code": "Vi har tyvärr inga prenumeranter!"} );
 
         } else {
-            console.log("visa prenumeranter");
-
+            // console.log("visa prenumeranter");
             for (subscriber in results) {
-                console.log("results[subscriber]", results[subscriber]);
-
                 
                 let subscriptionTemplate = 
                     `<article>
@@ -127,14 +118,12 @@ router.get('/loggedin/:id/subscribe', function(req, res) {
                         </ul>
                     </article>`;
                 printSubscription += subscriptionTemplate;
-                
+
             }; 
             printSubscription += `<a href="/admin/loggedin/${adminId}">Tillbaka</a><br>`;
             res.send(printSubscription);
         };
-
     });
-
 });
 
 module.exports = router;

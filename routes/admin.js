@@ -78,69 +78,94 @@ router.get('/loggedin/:id', function(req, res) {
     
     let printUsers = htmlHead + `<h3>Registrerade användare</h3>`;
 
-    fs.readFile('users.json', function(err, data) {
-        if (err) {
-            console.log(err);
-        }
+    //Hämta alla users from MongoDB
+    req.app.locals.db.collection("users").find().toArray()
+    .then(results => {
 
-        let users = JSON.parse(data);
-        // console.log(users);
+        // console.log("results", results);
 
-        for (user in users) {
-            // console.log(users[user].userName);
+        for (user in results) {
+            // console.log(results[user].userName);
         
             let userTemplate = 
                 `<article>
                     <ul>
                         <li>
-                            <p>${users[user].userName}<p>
+                            <p>${results[user].userName}<p>
                         </li>
                     </ul>
                 </article>`;
+                console.log(printUsers);
             printUsers += userTemplate;
         };
-
-        printUsers += 
-            `<a href="/admin/loggedin/${adminId}/subscribe" class="btn-fill">Se prenumerant-lista</a>
-            <a href="/admin">Logga ut</a>`;
         res.send(printUsers);
     });
     
+
+
+    // fs.readFile('users.json', function(err, data) {
+    //     if (err) {
+    //         console.log(err);
+    //     }
+
+    //     let users = JSON.parse(data);
+    //     // console.log(users);
+
+    //     for (user in users) {
+    //         // console.log(users[user].userName);
+        
+    //         let userTemplate = 
+    //             `<article>
+    //                 <ul>
+    //                     <li>
+    //                         <p>${users[user].userName}<p>
+    //                     </li>
+    //                 </ul>
+    //             </article>`;
+    //         printUsers += userTemplate;
+    //     };
+
+    //     printUsers += 
+    //         `<a href="/admin/loggedin/${adminId}/subscribe" class="btn-fill">Se prenumerant-lista</a>
+    //         <a href="/admin">Logga ut</a>`;
+    //     res.send(printUsers);
+    // });
+    
 }); 
 
-router.get('/loggedin/:id/subscribe', function(req, res) {
-    let adminId = req.params.id;
+// router.get('/loggedin/:id/subscribe', function(req, res) {
+//     let adminId = req.params.id;
 
-    let printSubscription = htmlHead + `<h4>Prenumeranter</h4>`;
+//     let printSubscription = htmlHead + `<h4>Prenumeranter</h4>`;
 
-    fs.readFile('users.json', function(err, data) {
-        if (err) {
-            console.log(err);
-        }
+//     fs.readFile('users.json', function(err, data) {
+//         if (err) {
+//             console.log(err);
+//         }
 
-        let users = JSON.parse(data);
-        // console.log(users);
+//         let users = JSON.parse(data);
+//         // console.log(users);
 
-        for (user in users) {
-            console.log(users[user].subscription);
+//         for (user in users) {
+//             console.log(users[user].subscription);
 
-            if (users[user].subscription === true) {
-                let subscriptionTemplate = 
-                    `<article>
-                        <ul>
-                            <li>
-                                <p>${users[user].userName}<p>
-                            </li>
-                        </ul>
-                    </article>`;
-                printSubscription += subscriptionTemplate;
-            }
-        };
+//             if (users[user].subscription === true) {
+//                 let subscriptionTemplate = 
+//                     `<article>
+//                         <ul>
+//                             <li>
+//                                 <p>${users[user].userName}<p>
+//                             </li>
+//                         </ul>
+//                     </article>`;
+//                 printSubscription += subscriptionTemplate;
+//             }
+//         };
 
-        printSubscription += `<a href="/admin/loggedin/${adminId}">Tillbaka</a><br>`;
-        res.send(printSubscription);
-    });
+//         printSubscription += `<a href="/admin/loggedin/${adminId}">Tillbaka</a><br>`;
+//         res.send(printSubscription);
+//     });
 
-});
+// });
 
 module.exports = router;

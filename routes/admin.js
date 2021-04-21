@@ -122,7 +122,7 @@ router.get('/loggedin/:id/subscribe', function(req, res) {
                     `<article>
                         <ul>
                             <li>
-                                <p>${results[subscriber].userName}<p>
+                                <p>${results[subscriber].email}<p>
                             </li>
                         </ul>
                     </article>`;

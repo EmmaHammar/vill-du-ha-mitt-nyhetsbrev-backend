@@ -31,6 +31,7 @@ router.post('/register', function(req, res) {
           {
             id: randomKey,
             userName: req.body.userName,
+            email: req.body.email,
             password: cryptoPass,
             subscription: false
           };

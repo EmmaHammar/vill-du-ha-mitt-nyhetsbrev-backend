@@ -98,28 +98,11 @@ router.get('/userpage/:id', function(req, res, next) {
 
 router.post('/subscribe/:id', function(req, res) {
   let findUser = req.body;
-  // console.log("getUser", getUser);
-
   //HÄMTA
   req.app.locals.db.collection("users").find( {"userName":findUser.userName} ).toArray()
-  // req.app.locals.db.collection("users").find().toArray()
   .then(result => {
 
-    console.log("result hela objektet", result);
-    // let allUsers = result; //array
-    
-    //HITTA 
-    // for (user in allUsers) {
-    //   if (result[user].userName === getUser.userName) {
-    //     let findUser = result[user];
-    //     console.log("findUser-subscription före assign", findUser.subscription);
-
-
-        //ÄNDRA
-        req.app.locals.db.collection("users").updateOne( {"subscription" : result[0].id}, {$set: {"subscription": result[0].subscription} }  )
-        .then(results => {
-            console.log("results i updateOne", results);
-        });
+    console.log("detta är findUser i databasen:", result);
 
         switch (result[0].subscription) {
           case true: 
@@ -132,9 +115,17 @@ router.post('/subscribe/:id', function(req, res) {
             break;
         };
 
+        
         // Object.assign(findUser, {subscription: findUser.subscription});
-        console.log("result[0] after ÄNDRA", result[0]);
+        console.log("result[0].subscription after switch", result[0].subscription);
+        //ÄNDRA
+        req.app.locals.db.collection("users").updateOne( {"id" : result[0].id}, {$set: {"subscription": result[0].subscription} }  )
+        .then(result => {
+            // console.log("findUser i databasen efter $set", result[0]);
+        });
       
+        console.log("result[0] after $set", result[0]);
+
 
         // req.app.locals.db.collection("users").deleteMany( {"userName": "bill"} )
         // .then(results => {

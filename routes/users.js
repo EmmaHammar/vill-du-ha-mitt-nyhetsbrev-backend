@@ -17,22 +17,39 @@ router.get('/', function(req, res, next) {
 router.post('/register', function(req, res) {
   //Denna router sparar nya användare till databasen
   
-  let newUser = req.body;
+  // let newUser = 
+  //   {
+  //     id: randomKey,
+  //     userName: req.body.userName,
+  //     password: cryptoPass,
+  //     subscription: false
+  //   };
+
+  // let newUser = req.body;
 
   //Hämta MongoDB
-  req.app.locals.db.collection("users").find( {"userName":newUser.userName} ).toArray()
+  req.app.locals.db.collection("users").find( {"userName":req.body.userName} ).toArray()
   .then(results => {
     // console.log("results", results); 
 
       if ( results == "") {
         // console.log("newUser saved");
         let randomKey = rand.generate(8);
-        Object.assign(newUser, {id: randomKey});
+
+        let cryptoPass = CryptoJS.AES.encrypt(req.body.password, "Salt Nyckel").toString();
+        
+        let newUser = 
+          {
+            id: randomKey,
+            userName: req.body.userName,
+            password: cryptoPass,
+            subscription: false
+          };
+
+        console.log("newUser", newUser);
         
         req.app.locals.db.collection("users").insertOne(newUser)
           .then(result => { 
-            // console.log("saved to mongoDB", result);
-            // console.log(" newUser.id",  newUser.id);
             res.json( {"code" : "newUser saved", "id" : newUser.id} );
           });
 
@@ -42,6 +59,36 @@ router.post('/register', function(req, res) {
       }
     
   });
+
+
+
+
+
+  // let newUser = req.body;
+
+  // //Hämta MongoDB
+  // req.app.locals.db.collection("users").find( {"userName":newUser.userName} ).toArray()
+  // .then(results => {
+  //   // console.log("results", results); 
+
+  //     if ( results == "") {
+  //       // console.log("newUser saved");
+  //       let randomKey = rand.generate(8);
+  //       Object.assign(newUser, {id: randomKey});
+        
+  //       req.app.locals.db.collection("users").insertOne(newUser)
+  //         .then(result => { 
+  //           // console.log("saved to mongoDB", result);
+  //           // console.log(" newUser.id",  newUser.id);
+  //           res.json( {"code" : "newUser saved", "id" : newUser.id} );
+  //         });
+
+  //     } else {
+  //       // console.log("userName already exists");
+  //       res.json( {"code" : "userName already exists"} );
+  //     }
+    
+  // });
 
 });
 

@@ -47,7 +47,7 @@ DONE 3. Nya användare som sparas i frontend gränssittet skall sparas i en Mong
 DONE 4. En registrerad användare skall kunna logga in på frontend applikationen 
 DONE 5. och där kunna ändra sin  prenumerationsstatus.
 DONE 6. Nya användare får randomiserade nycklar som identifierar dem.
-7. En administratör skall kunna logga in på express servern och där kunna se alla registrerade användare samt kunna se en lista på alla de mailadresser som prenumererar på ett nyhetsbrev.
+DONE 7. En administratör skall kunna logga in på express servern och där kunna se alla registrerade användare samt kunna se en lista på alla de mailadresser som prenumererar på ett nyhetsbrev.
 
 VG krav
 Lösenorden som sparas skall vara krypterade.

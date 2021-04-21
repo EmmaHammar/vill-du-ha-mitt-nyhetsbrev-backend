@@ -115,10 +115,8 @@ router.post('/subscribe/:id', function(req, res) {
             break;
         };
 
-        
-        // Object.assign(findUser, {subscription: findUser.subscription});
         console.log("result[0].subscription after switch", result[0].subscription);
-        //ÄNDRA
+        //ÄNDRA (och SPARA - den verkar spara?)
         req.app.locals.db.collection("users").updateOne( {"id" : result[0].id}, {$set: {"subscription": result[0].subscription} }  )
         .then(result => {
             // console.log("findUser i databasen efter $set", result[0]);
@@ -126,35 +124,7 @@ router.post('/subscribe/:id', function(req, res) {
       
         console.log("result[0] after $set", result[0]);
 
-
-        // req.app.locals.db.collection("users").deleteMany( {"userName": "bill"} )
-        // .then(results => {
-        //     console.log(results);
-        // });
-
-        // req.app.locals.db.collection("users").countDocuments()
-        // .then(results => {
-        //     console.log("såhär många finns i databasen: ", results);
-        // });
-
-        
-        // SPARA 
-        // req.app.locals.db.collection("users").insertOne( {updatedUser} )
-        // .then(result => { 
-        //   // console.log("result", result);
-        //   // console.log("allUsers after saving result[0]", allUsers);
-        //   res.json( {"code": "Uppdaterat prenumerationsstatuset!", "subscription": result[0].subscription} );
-        // });
-
-        
-
-        //The index is not present in your collection, in which you are trying insert.??
-        //(node:15012) UnhandledPromiseRejectionWarning: MongoError: E11000 duplicate key error collection: usersbook.users index: _id_ dup key: { _id: ObjectId('607ebc1e5c85b91dd98d6025') }
-        res.json( {"code": "Uppdaterat prenumerationsstatuset!", "subscription": result[0].subscription} ); //ta bort denna rad sen när jag lyckats SPARA
-
-    //   }
-
-    // }
+        res.json( {"code": "Uppdaterat prenumerationsstatuset!", "subscription": result[0].subscription} ); 
     
   });
   

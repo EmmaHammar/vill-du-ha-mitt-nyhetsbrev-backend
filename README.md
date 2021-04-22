@@ -11,6 +11,8 @@ npm i random-key
 npm install crypto-js
 npm i mongodb 
 
+4) git clone: https://github.com/EmmaHammar/vill-du-ha-mitt-nyhetsbrev-frontend
+
 # Admin-login
 Heroku-länk: https://vill-du-ha-mitt-nyhetsbrev-be.herokuapp.com/admin
 

@@ -18,9 +18,9 @@ router.get('/', function(req, res, next) {
     <div>
         <h2>Adminlogin</h2>
         <form action="/admin" method="post">
-            <div><input typ="text" id="adminUserName" name="adminUserName" placeholder="Skriv ditt användarnamn"></div> 
-            <div><input typ="text" id="adminPassword" name="adminPassword" placeholder="Skriv ditt lösenord"></div>
-            <div id="adminBtn"><button>Logga in</button></div> 
+            <div><input type="text" id="adminUserName" name="adminUserName" placeholder="Skriv ditt användarnamn"></div> 
+            <div><input type="password" id="adminPassword" name="adminPassword" placeholder="Skriv ditt lösenord"></div>
+            <div id="adminBtn"><button type="submit">Logga in</button></div> 
         </form>
     </div>`;
   res.send(printAdminLoginTemplate);

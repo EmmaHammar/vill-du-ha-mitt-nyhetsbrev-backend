@@ -25,7 +25,7 @@ router.post('/register', function(req, res) {
         // console.log("newUser saved");
         let randomKey = rand.generate(8);
 
-        let cryptoPass = CryptoJS.AES.encrypt(req.body.password, "Salt Nyckel").toString();
+        let cryptoPass = CryptoJS.AES.encrypt(req.body.password, "o=B6LCgWNMXYDT(").toString();
         
         let newUser = 
           {
@@ -69,7 +69,7 @@ router.post("/userpage", function(req,res) {
     } else {
       // console.log("pass in MongoDB is:", results[0].password);
   
-      let originalPass = CryptoJS.AES.decrypt(results[0].password, "Salt Nyckel").toString(CryptoJS.enc.Utf8);
+      let originalPass = CryptoJS.AES.decrypt(results[0].password, "o=B6LCgWNMXYDT(").toString(CryptoJS.enc.Utf8);
       // console.log("originalPass", originalPass);
       // console.log("checkUsers pass:", checkUser.password);
 

@@ -22,9 +22,8 @@ router.post('/register', function(req, res) {
     // console.log("results", results); 
 
       if ( results == "") {
-        // console.log("newUser saved");
-        let randomKey = rand.generate(8);
 
+        let randomKey = rand.generate(8);
         let cryptoPass = CryptoJS.AES.encrypt(req.body.password, "o=B6LCgWNMXYDT(").toString();
         
         let newUser = 
@@ -35,8 +34,6 @@ router.post('/register', function(req, res) {
             password: cryptoPass,
             subscription: false
           };
-
-        console.log("newUser", newUser);
         
         req.app.locals.db.collection("users").insertOne(newUser)
           .then(result => { 
@@ -44,7 +41,6 @@ router.post('/register', function(req, res) {
           });
 
       } else {
-        // console.log("userName already exists");
         res.json( {"code" : "userName already exists"} );
       }
     
@@ -56,7 +52,6 @@ router.post("/userpage", function(req,res) {
 //This router makes login checks 
 
   let checkUser = req.body;
-  // console.log("checkUser", checkUser);
 
   req.app.locals.db.collection("users").find( {"userName":checkUser.userName}).toArray()
   .then(results => {
@@ -70,14 +65,10 @@ router.post("/userpage", function(req,res) {
       // console.log("pass in MongoDB is:", results[0].password);
   
       let originalPass = CryptoJS.AES.decrypt(results[0].password, "o=B6LCgWNMXYDT(").toString(CryptoJS.enc.Utf8);
-      // console.log("originalPass", originalPass);
-      // console.log("checkUsers pass:", checkUser.password);
 
       if (originalPass === checkUser.password) {
-        // console.log("user och lösenord stämde");
-        res.json( {"code": "ok", "userId": results[0].id} ) //skixkar tillb code + id
+        res.json( {"code": "ok", "userId": results[0].id} ) //skickar tillb code + id
       } else {
-        // console.log("fel lösenord");
         res.json( {"code": "error"} )
       }
     }   
@@ -125,7 +116,6 @@ router.post('/subscribe/:id', function(req, res) {
             break;
         };
 
-        // console.log("result[0].subscription after switch", result[0].subscription);
         //change/save
         req.app.locals.db.collection("users").updateOne( {"id" : result[0].id}, {$set: {"subscription": result[0].subscription} }  )
         .then(result => {

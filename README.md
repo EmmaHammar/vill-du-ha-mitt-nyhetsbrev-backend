@@ -3,7 +3,7 @@
 
 2) npm install
 
-3) nodemon start (om du har Nodemon installerat, annars npm start)
+3) nodemon start (eller npm start)
 
 4) Länk till frontend-repot: https://emmahammar.github.io/vill-du-ha-mitt-nyhetsbrev-frontend/ eller git clone: https://github.com/EmmaHammar/vill-du-ha-mitt-nyhetsbrev-frontend
 

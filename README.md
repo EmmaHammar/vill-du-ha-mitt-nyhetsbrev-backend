@@ -5,7 +5,10 @@
 
 3) nodemon start (eller npm start)
 
-4) Länk till frontend-repot: https://emmahammar.github.io/vill-du-ha-mitt-nyhetsbrev-frontend/ eller git clone: https://github.com/EmmaHammar/vill-du-ha-mitt-nyhetsbrev-frontend
+4) git clone: https://github.com/EmmaHammar/vill-du-ha-mitt-nyhetsbrev-frontend
+
+Frontend repo: https://emmahammar.github.io/vill-du-ha-mitt-nyhetsbrev-frontend/
+Backend repo: https://vill-du-ha-mitt-nyhetsbrev-be.herokuapp.com/
 
 # Admin-login
 Heroku-länk: https://vill-du-ha-mitt-nyhetsbrev-be.herokuapp.com/admin eller http://localhost:3000/admin

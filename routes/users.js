@@ -76,7 +76,8 @@ router.post("/userpage", function(req,res) {
 
 });
 
-router.get('/userpage/:id', function(req, res, next) {
+// router.get('/userpage/:id', function(req, res, next) {
+router.get('/userpage', function(req, res, next) {
 
   let showUserId = req.params.id;
 
@@ -97,7 +98,9 @@ router.get('/userpage/:id', function(req, res, next) {
 
 }); 
 
-router.post('/subscribe/:id', function(req, res) {
+// router.post('/subscribe/:id', function(req, res) {
+router.post('/subscribe', function(req, res) {
+
   let findUser = req.body;
   // get/find
   req.app.locals.db.collection("users").find( {"userName":findUser.userName} ).toArray()

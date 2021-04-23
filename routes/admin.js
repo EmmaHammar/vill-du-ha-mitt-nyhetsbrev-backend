@@ -30,7 +30,6 @@ router.post('/', function(req, res) {
 
     let adminUser = req.body;
     let adminLoginMsg; 
-    console.log(adminUser);
 
     fs.readFile("admins.json", function(err, data) {
         if(err) {
@@ -42,16 +41,12 @@ router.post('/', function(req, res) {
 
         //se om adminUserName finns i admins
         const result = admins.find( ({ adminUserName }) => adminUserName === adminUser.adminUserName);
-        console.log(result);
 
         if (result !== undefined) {
-            console.log("admin exists");
             adminLoginMsg = "admin exists";
             if (adminUser.adminPassword === result.adminPassword) {
-                console.log("login success");
                 res.redirect('/admin/loggedin/' + result.id)
             } else {
-                console.log("error, wrong password");
                 adminLoginMsg = "error, wrong password";
                 res.json(adminLoginMsg);
             }
@@ -81,7 +76,6 @@ router.get('/loggedin/:id', function(req, res) {
                         </li>
                     </ul>
                 </article>`;
-                console.log(printUsers);
             printUsers += userTemplate;
 
         };
@@ -102,11 +96,9 @@ router.get('/loggedin/:id/subscribe', function(req, res) {
     .then(results => {
 
         if (results == "" ) {
-            // console.log("Vi har inga prenumeranter");
             res.json( {"code": "Vi har tyvärr inga prenumeranter!"} );
 
         } else {
-            // console.log("visa prenumeranter");
             for (subscriber in results) {
                 
                 let subscriptionTemplate = 
